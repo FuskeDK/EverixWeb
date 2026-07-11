@@ -12,6 +12,8 @@ export default defineConfig({
         admin: resolve(__dirname, 'admin.html'),
         donation: resolve(__dirname, 'donation.html'),
         tak: resolve(__dirname, 'tak.html'),
+        privatlivspolitik: resolve(__dirname, 'privatlivspolitik.html'),
+        servicevilkaar: resolve(__dirname, 'servicevilkaar.html'),
       },
     },
   },

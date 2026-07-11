@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Regler - Everix</title>
-<meta name="description" content="Reglerne for Everix. Læs dem grundigt før du ansøger, de bliver håndhævet konsekvent.">
+<title>Privatlivspolitik - Everix</title>
+<meta name="description" content="Privatlivspolitik for Everix - hvilke data vi indsamler, og hvorfor.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
     </a>
     <nav class="main-nav" aria-label="Hovednavigation">
       <a href="/">Hjem</a>
-      <a href="/regler" class="active">Regler</a>
+      <a href="/regler">Regler</a>
       <a href="/ansog">Ansøg</a>
       <a href="/donation">Donation</a>
     </nav>
@@ -49,26 +49,67 @@
 
   <section class="page-hero">
     <div class="wrap">
-      <p class="eyebrow">Regelsæt</p>
-      <h1 class="page-title">Reglerne for Everix</h1>
-      <p class="page-lede">Reglerne findes for at holde byen troværdig for alle, der spiller med. Læs dem grundigt før du ansøger. De bliver håndhævet ens, uanset hvem du er, eller hvor længe du har spillet.</p>
+      <p class="eyebrow">Juridisk</p>
+      <h1 class="page-title">Privatlivspolitik</h1>
+      <p class="page-lede">Senest opdateret 12. juli 2026. Her kan du læse, hvilke data Everix indsamler, hvorfor, og hvordan du får dem slettet.</p>
     </div>
   </section>
 
   <section class="section rules-section">
     <div class="wrap">
-      <div id="rulesContainer"></div>
-    </div>
-  </section>
 
-  <section class="section cta-section">
-    <div class="wrap cta-inner">
-      <h2>Klar til at ansøge</h2>
-      <p>Reglerne er en del af ansøgningen. Har du læst dem grundigt, er du klar til næste skridt.</p>
-      <div class="cta-actions">
-        <a href="/ansog" class="btn btn-primary btn-large">Ansøg nu</a>
-        <a href="https://discord.gg/nfb6urQQnG" class="btn btn-outline btn-large" target="_blank" rel="noopener">Discord</a>
+      <div class="rules-group">
+        <h2>Hvilke data indsamler vi</h2>
+        <p class="rules-note">
+          Når du logger ind med Discord for at ansøge, gemmer vi dit Discord-ID og brugernavn, sammen med de svar du giver i
+          ansøgningen. Logger du ind med Google som staff/admin, bruger vi kun din e-mail til at afgøre, om du har adgang.
+          Donerer du via Stripe, håndterer Stripe selv dine betalingsoplysninger (kortnummer m.m.) - vi ser og gemmer aldrig
+          disse, kun at en donation er gennemført.
+        </p>
       </div>
+
+      <div class="rules-group">
+        <h2>Hvorfor vi indsamler dem</h2>
+        <p class="rules-note">
+          Discord-login findes for at forhindre, at folk ansøger under falsk navn. Dine ansøgningssvar bruges udelukkende til
+          at vurdere din ansøgning og gemmes, så staff kan se historikken. Donationsdata bruges til at bekræfte din betaling,
+          når du opretter en ticket for at få dine fordele.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Hvem kan se dine data</h2>
+        <p class="rules-note">
+          Dine ansøgningssvar kan ses af staff med adgang til den pågældende kategori (f.eks. Politi Ledelse for
+          politi-ansøgninger) samt af serverens administratorer. Vi videresælger eller deler ikke dine data med tredjeparter,
+          ud over Discord og Stripe, som er nødvendige for login og betaling.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Cookies</h2>
+        <p class="rules-note">
+          Vi bruger en enkelt, signeret login-cookie til at huske, at du er logget ind. Den indeholder ikke andet end dit
+          Discord-ID og brugernavn, og bruges ikke til sporing eller reklame.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Sletning af data</h2>
+        <p class="rules-note">
+          Du kan til enhver tid bede om at få dine data slettet ved at oprette en ticket på vores Discord-server. Vi sletter
+          din ansøgningshistorik, medmindre vi er retligt forpligtet til at gemme oplysninger om en donation.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Kontakt</h2>
+        <p class="rules-note">
+          Har du spørgsmål til denne politik, kan du altid kontakte staff via en ticket på
+          <a href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener" style="color: var(--orange); text-decoration: underline;">Discord</a>.
+        </p>
+      </div>
+
     </div>
   </section>
 
@@ -110,7 +151,5 @@
 </footer>
 
 <script type="module" src="/js/main.js"></script>
-<script type="module" src="js/staff-nav.js"></script>
-<script type="module" src="js/regler.js"></script>
 </body>
 </html>

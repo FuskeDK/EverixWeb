@@ -10,6 +10,8 @@
     { "source": "/bande", "destination": "/api/staff-page?category=Bande" },
     { "source": "/allowlist", "destination": "/api/staff-page?category=Allowlist" },
     { "source": "/donation", "destination": "/donation.html" },
-    { "source": "/tak", "destination": "/tak.html" }
+    { "source": "/tak", "destination": "/tak.html" },
+    { "source": "/privatlivspolitik", "destination": "/privatlivspolitik.html" },
+    { "source": "/servicevilkaar", "destination": "/servicevilkaar.html" }
   ]
 }
