@@ -64,7 +64,7 @@ import { renderApplicationList } from "./applications-ui.js";
     toggleBtn.addEventListener("click", function () {
       var next = !categoryEnabled;
       toggleBtn.disabled = true;
-      fetch("/api/admin/category-settings", {
+      fetch("/api/category-settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

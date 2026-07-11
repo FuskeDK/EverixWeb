@@ -1,11 +1,26 @@
-import { verifyOAuthState, createAdminSession, isAllowedAdminEmail } from "../lib/session.js";
+import { createOAuthState, verifyOAuthState, createAdminSession, isAllowedAdminEmail } from "../lib/session.js";
 
 const REDIRECT_URI = "https://everix-chi.vercel.app/api/google-callback";
 
 export default async function handler(req, res) {
   const { code, state } = req.query;
 
-  if (!code || !state || !verifyOAuthState(req, res, "google", state)) {
+  if (!code) {
+    const newState = createOAuthState(res, "google");
+    const params = new URLSearchParams({
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      redirect_uri: REDIRECT_URI,
+      response_type: "code",
+      scope: "openid email",
+      state: newState,
+      prompt: "select_account",
+    });
+    res.writeHead(302, { Location: `https://accounts.google.com/o/oauth2/v2/auth?${params}` });
+    res.end();
+    return;
+  }
+
+  if (!state || !verifyOAuthState(req, res, "google", state)) {
     res.status(401).send("Login mislykkedes. Gå tilbage og prøv igen.");
     return;
   }

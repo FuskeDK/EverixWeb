@@ -95,7 +95,7 @@ import { renderApplicationList, escapeHtml } from "./applications-ui.js";
   var addGroupBtn = document.getElementById("addGroupBtn");
 
   function ruleApi(method, kind, payload) {
-    return fetch("/api/admin/rules", {
+    return fetch("/api/rules", {
       method: method,
       headers: { "Content-Type": "application/json" },
       credentials: "include",
