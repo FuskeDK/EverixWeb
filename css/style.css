@@ -475,7 +475,7 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
   border-style: solid;
   border-color: rgba(255,255,255,0.18);
   background: var(--bg-2);
-  padding: 38px 36px; transition: background-color .25s var(--ease), border-color .25s var(--ease);
+  padding: 24px 28px; transition: background-color .25s var(--ease), border-color .25s var(--ease);
 }
 .apply-card:hover{ background: var(--bg-3); border-color: var(--orange); }
 
@@ -485,21 +485,21 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 .apply-card-disabled *{ cursor: not-allowed !important; pointer-events: none !important; }
 .apply-card-disabled h3{ color: var(--gray); }
 
-.apply-card-top{ display: flex; align-items: center; justify-content: flex-end; height: 17px; margin-bottom: 22px; }
-.apply-card-arrow{ width: 17px; height: 17px; color: var(--gray-dim); transition: transform .25s var(--ease), color .25s var(--ease); }
+.apply-card-top{ display: flex; align-items: center; justify-content: flex-end; height: 14px; margin-bottom: 10px; }
+.apply-card-arrow{ width: 14px; height: 14px; color: var(--gray-dim); transition: transform .25s var(--ease), color .25s var(--ease); }
 .apply-card:hover .apply-card-arrow{ transform: translate(2px, -2px); color: var(--white); }
 
-.apply-card h3{ font-family: var(--font-display); font-weight: 700; font-size: 19px; line-height: 1.2; margin-bottom: 10px; }
+.apply-card h3{ font-family: var(--font-display); font-weight: 700; font-size: 17px; line-height: 1.15; margin-bottom: 6px; }
 .apply-card p{
-  color: var(--gray); font-size: 14px; line-height: 22px; margin-bottom: 18px;
-  height: 66px; overflow: hidden;
+  color: var(--gray); font-size: 13px; line-height: 18px; margin-bottom: 10px;
+  height: 54px; overflow: hidden;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;
 }
 .apply-card-cta{
   display: inline-flex; align-items: center; align-self: flex-start; white-space: nowrap;
   background: var(--orange); color: #1a0e02; border: none;
-  font-weight: 700; font-size: 12px; letter-spacing: .03em; text-transform: uppercase;
-  padding: 10px 18px; border-radius: 7px;
+  font-weight: 700; font-size: 11px; letter-spacing: .03em; text-transform: uppercase;
+  padding: 8px 16px; border-radius: 6px;
   box-shadow: 3px 3px 0 0 var(--orange-dark);
   transition: background-color .2s var(--ease), transform .2s var(--ease), box-shadow .2s var(--ease);
 }
