@@ -1,4 +1,4 @@
-import { verifyOAuthState, createAdminSession } from "../lib/session.js";
+import { verifyOAuthState, createAdminSession, isAllowedAdminEmail } from "../lib/session.js";
 
 const REDIRECT_URI = "https://everix-chi.vercel.app/api/google-callback";
 
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
     if (!userRes.ok) throw new Error("userinfo failed");
     const profile = await userRes.json();
 
-    if (!profile.email || profile.email !== process.env.ADMIN_EMAIL || !profile.email_verified) {
+    if (!profile.email_verified || !isAllowedAdminEmail(profile.email)) {
       res.status(403).send("Denne konto har ikke adgang til admin.");
       return;
     }
