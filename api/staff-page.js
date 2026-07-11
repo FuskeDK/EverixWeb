@@ -1,18 +1,35 @@
-<!doctype html>
+import { hasCategoryAccess } from "../lib/roles.js";
+
+const CATEGORY_ROLE_NAMES = {
+  Politi: "Politi Ledelse",
+  EMS: "Sundhedsvæsen Ledelse",
+  Firma: "Firma Ansvarlig",
+  Bande: "Bande Ansvarlig",
+  Allowlist: "Whitelist Ansvarlig",
+};
+
+const NOT_FOUND_HTML = `<!doctype html>
+<html lang="da"><head><meta charset="UTF-8"><title>404 - Everix</title>
+<meta name="robots" content="noindex, nofollow">
+<style>body{background:#0a0a0b;color:#9a9ba3;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}</style>
+</head><body><p>404 &mdash; Siden findes ikke.</p></body></html>`;
+
+function renderPage(category) {
+  const roleName = CATEGORY_ROLE_NAMES[category];
+  return `<!doctype html>
 <html lang="da">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EMS - Everix</title>
-<meta name="description" content="EMS-ansøgninger for Everix.">
+<title>${category} - Everix</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="/logo.png">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
-<body data-category="EMS">
+<body data-category="${category}">
 
 <div class="grain" aria-hidden="true"></div>
 <a class="skip-link" href="#hovedindhold">Spring til indhold</a>
@@ -49,27 +66,27 @@
   <section class="page-hero">
     <div class="wrap">
       <p class="eyebrow">Staff</p>
-      <h1 class="page-title">EMS</h1>
+      <h1 class="page-title">${category}</h1>
     </div>
   </section>
 
-  <!-- LOGIN GATE -->
+  <!-- LOGIN GATE (fallback if the session expires after this page was served) -->
   <section class="section apply-section" id="staffLoginGate" hidden>
     <div class="wrap apply-wrap apply-gate">
-      <p class="apply-gate-text">Log ind med Discord for at se EMS-ansøgninger.</p>
+      <p class="apply-gate-text">Log ind med Discord for at se ${category}-ansøgninger.</p>
       <a href="/api/discord-callback" class="btn btn-primary btn-large">Log ind med Discord</a>
     </div>
   </section>
 
-  <!-- NOT AUTHORIZED -->
+  <!-- NOT AUTHORIZED (fallback if the role is removed after this page was served) -->
   <section class="section apply-section" id="staffNotAuthorized" hidden>
     <div class="wrap apply-wrap apply-gate">
-      <p class="apply-gate-text">Du har ikke adgang til denne side. Kræver rollen Sundhedsvæsen Ledelse på Discord.</p>
+      <p class="apply-gate-text">Du har ikke adgang til denne side. Kræver rollen ${roleName} på Discord.</p>
     </div>
   </section>
 
   <!-- STAFF PANEL -->
-  <section class="section" id="staffPanel" hidden>
+  <section class="section" id="staffPanel">
     <div class="wrap">
       <div class="apply-user-bar">
         <span>Logget ind</span>
@@ -105,8 +122,28 @@
   </div>
 </footer>
 
-<script type="module" src="js/main.js"></script>
-<script type="module" src="js/staff-nav.js"></script>
-<script type="module" src="js/staff.js"></script>
+<script type="module" src="/js/main.js"></script>
+<script type="module" src="/js/staff.js"></script>
 </body>
-</html>
+</html>`;
+}
+
+export default async function handler(req, res) {
+  const { category } = req.query;
+
+  if (!CATEGORY_ROLE_NAMES[category]) {
+    res.status(404).setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(NOT_FOUND_HTML);
+    return;
+  }
+
+  const allowed = await hasCategoryAccess(req, category);
+  if (!allowed) {
+    res.status(404).setHeader("Content-Type", "text/html; charset=utf-8");
+    res.send(NOT_FOUND_HTML);
+    return;
+  }
+
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  res.status(200).send(renderPage(category));
+}

@@ -1,4 +1,4 @@
-import { renderApplicationList, escapeHtml } from "./applications-ui.js";
+import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
 
 (function () {
   "use strict";
