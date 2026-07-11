@@ -9,6 +9,7 @@
     { "source": "/firma", "destination": "/api/staff-page?category=Firma" },
     { "source": "/bande", "destination": "/api/staff-page?category=Bande" },
     { "source": "/allowlist", "destination": "/api/staff-page?category=Allowlist" },
-    { "source": "/donation", "destination": "/donation.html" }
+    { "source": "/donation", "destination": "/donation.html" },
+    { "source": "/tak", "destination": "/tak.html" }
   ]
 }
