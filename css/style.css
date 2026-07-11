@@ -617,43 +617,44 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 .field-compact:last-child{ margin-bottom: 0; }
 .form-panel .form-panel-grid .field-compact{ margin-bottom: 0; }
 
-/* Rule agreement checklist */
-.rule-check-header{ display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
-.rule-check-header h2{ margin-bottom: 0; }
-.rule-check-counter{
-  font-family: var(--font-mono); font-size: 12px; color: var(--gray-dim); letter-spacing: .02em; white-space: nowrap;
-}
-.rule-check-counter.is-complete{ color: var(--green); }
-.rule-check-box{
-  background: var(--bg-2); border: 1px solid var(--line-strong); border-radius: var(--radius-m);
-  padding: 18px 20px; max-height: 340px; overflow-y: auto;
-}
-.rule-check-group-title{
-  font-family: var(--font-body); font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--gray-dim); margin: 20px 0 10px;
-}
-.rule-check-group-title:first-child{ margin-top: 0; }
-.rule-check-item{
-  display: flex; align-items: flex-start; gap: 12px; padding: 9px 6px; border-radius: var(--radius-s);
-  transition: background-color .15s var(--ease);
-}
-.rule-check-item:hover{ background: var(--bg-3); }
-.rule-check-item input{ margin-top: 3px; width: 16px; height: 16px; accent-color: var(--orange); flex-shrink: 0; }
-.rule-check-item span{ color: var(--gray); font-size: 14px; line-height: 1.55; }
-.rule-check-item span strong{ color: var(--white); }
 
 /* =========================================================
    Admin panel
    ========================================================= */
-.admin-list{ display: flex; flex-direction: column; gap: 18px; max-width: 900px; }
+.admin-filters{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.admin-filter-btn{
+  font-family: var(--font-body); font-size: 13px; font-weight: 600;
+  color: var(--gray); background: var(--bg-2); border: 1px solid var(--line);
+  padding: 8px 16px; border-radius: 999px; transition: border-color .15s var(--ease), color .15s var(--ease);
+}
+.admin-filter-btn:hover{ color: var(--white); border-color: var(--line-strong); }
+.admin-filter-btn.is-active{ color: #1a0e02; background: var(--orange); border-color: var(--orange); }
+
+.admin-list{ display: flex; flex-direction: column; gap: 10px; max-width: 900px; }
 .admin-card{
   background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius-m);
-  padding: 24px 28px;
+  overflow: hidden; min-width: 0;
 }
 .admin-status-approved{ border-color: rgba(47,174,99,0.4); }
 .admin-status-rejected{ border-color: rgba(255,90,31,0.3); opacity: .7; }
-.admin-card-head{ display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 6px; }
-.admin-card-head h3{ font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+
+.admin-card-head{
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  width: 100%; padding: 16px 20px; text-align: left;
+  transition: background-color .15s var(--ease);
+}
+.admin-card-head:hover{ background: var(--bg-3); }
+.admin-card-title{
+  font-family: var(--font-display); font-size: 15px; font-weight: 700;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+}
+.admin-card-meta-inline{
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  color: var(--gray-dim); font-size: 12.5px;
+}
+.admin-chevron{ width: 14px; height: 14px; color: var(--gray-dim); transition: transform .2s var(--ease); }
+.admin-card.is-open .admin-chevron{ transform: rotate(180deg); }
+
 .admin-status-badge{
   font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
   color: var(--gray-dim); background: var(--bg-3); border: 1px solid var(--line);
@@ -661,11 +662,12 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 }
 .admin-status-approved .admin-status-badge{ color: var(--green); }
 .admin-status-rejected .admin-status-badge{ color: var(--orange); }
-.admin-meta{ color: var(--gray-dim); font-size: 12.5px; margin-bottom: 18px; }
-.admin-answers{ display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
-.admin-answer-row{ font-size: 14px; line-height: 1.6; }
+
+.admin-card-body{ padding: 4px 20px 20px; border-top: 1px solid var(--line); }
+.admin-answers{ display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+.admin-answer-row{ font-size: 14px; line-height: 1.6; min-width: 0; }
 .admin-answer-key{ display: block; color: var(--gray-dim); font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 2px; }
-.admin-answer-value{ color: var(--white); white-space: pre-wrap; }
+.admin-answer-value{ color: var(--white); white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word; }
 .admin-actions{ display: flex; gap: 12px; }
 
 .checkbox-field{ display: flex; align-items: flex-start; gap: 12px; }

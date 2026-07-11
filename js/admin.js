@@ -6,11 +6,21 @@
   var panel = document.getElementById("adminPanel");
   var list = document.getElementById("adminList");
   var empty = document.getElementById("adminEmpty");
+  var filters = document.getElementById("adminFilters");
+
+  var allApplications = [];
+  var activeFilter = "Alle";
 
   function statusLabel(status) {
     if (status === "approved") return "Godkendt";
     if (status === "rejected") return "Afvist";
     return "Afventer";
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
   }
 
   function renderAnswers(answers) {
@@ -30,17 +40,17 @@
     return '<div class="admin-answers">' + rows + "</div>";
   }
 
-  function escapeHtml(str) {
-    var div = document.createElement("div");
-    div.textContent = str;
-    return div.innerHTML;
-  }
+  function render() {
+    var applications =
+      activeFilter === "Alle" ? allApplications : allApplications.filter(function (a) { return a.category === activeFilter; });
 
-  function renderApplications(applications) {
     if (!applications.length) {
+      list.innerHTML = "";
       empty.hidden = false;
       return;
     }
+    empty.hidden = true;
+
     list.innerHTML = applications
       .map(function (app) {
         var actions =
@@ -57,29 +67,50 @@
         return (
           '<article class="admin-card admin-status-' +
           app.status +
+          '" data-id="' +
+          app.id +
           '">' +
-          '<div class="admin-card-head">' +
-          "<h3>" +
+          '<button type="button" class="admin-card-head" data-toggle="' +
+          app.id +
+          '">' +
+          '<span class="admin-card-title">' +
           escapeHtml(app.discord_username) +
           " &middot; " +
           escapeHtml(app.category) +
-          "</h3>" +
+          "</span>" +
+          '<span class="admin-card-meta-inline">' +
+          new Date(app.created_at).toLocaleDateString("da-DK") +
           '<span class="admin-status-badge">' +
           statusLabel(app.status) +
           "</span>" +
-          "</div>" +
-          '<p class="admin-meta">' +
-          new Date(app.created_at).toLocaleString("da-DK") +
-          "</p>" +
+          '<svg class="admin-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          "</span>" +
+          "</button>" +
+          '<div class="admin-card-body" id="admin-body-' +
+          app.id +
+          '" hidden>' +
           renderAnswers(app.answers) +
           actions +
+          "</div>" +
           "</article>"
         );
       })
       .join("");
 
-    list.querySelectorAll("button[data-action]").forEach(function (btn) {
+    list.querySelectorAll("[data-toggle]").forEach(function (btn) {
       btn.addEventListener("click", function () {
+        var id = btn.getAttribute("data-toggle");
+        var body = document.getElementById("admin-body-" + id);
+        var card = btn.closest(".admin-card");
+        var isOpen = !body.hidden;
+        body.hidden = isOpen;
+        card.classList.toggle("is-open", !isOpen);
+      });
+    });
+
+    list.querySelectorAll("button[data-action]").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
         var id = btn.getAttribute("data-id");
         var action = btn.getAttribute("data-action");
         btn.disabled = true;
@@ -110,6 +141,18 @@
     });
   }
 
+  if (filters) {
+    filters.addEventListener("click", function (e) {
+      var btn = e.target.closest(".admin-filter-btn");
+      if (!btn) return;
+      activeFilter = btn.getAttribute("data-filter");
+      filters.querySelectorAll(".admin-filter-btn").forEach(function (b) {
+        b.classList.toggle("is-active", b === btn);
+      });
+      render();
+    });
+  }
+
   function load() {
     return fetch("/api/admin/applications", { credentials: "include" }).then(function (r) {
       if (r.status === 401) {
@@ -122,7 +165,8 @@
       }
       return r.json().then(function (data) {
         panel.hidden = false;
-        renderApplications(data.applications || []);
+        allApplications = data.applications || [];
+        render();
       });
     });
   }

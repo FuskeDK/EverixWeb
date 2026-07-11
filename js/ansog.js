@@ -49,20 +49,6 @@
     });
   }
 
-  var ruleCheckboxes = document.querySelectorAll('input[name="regel"]');
-  var ruleCounter = document.getElementById("ruleCounter");
-  if (ruleCheckboxes.length && ruleCounter) {
-    var updateRuleCounter = function () {
-      var checked = document.querySelectorAll('input[name="regel"]:checked').length;
-      ruleCounter.textContent = checked + " / " + ruleCheckboxes.length + " valgt (kræver alle)";
-      ruleCounter.classList.toggle("is-complete", checked === ruleCheckboxes.length);
-    };
-    ruleCheckboxes.forEach(function (box) {
-      box.addEventListener("change", updateRuleCounter);
-    });
-    updateRuleCounter();
-  }
-
   var form = document.getElementById("applyForm");
   var success = document.getElementById("formSuccess");
   if (!form) return;
@@ -76,16 +62,10 @@
 
     var formData = new FormData(form);
     var answers = {};
-    var rules = [];
     formData.forEach(function (value, key) {
-      if (key === "regel") {
-        rules.push(value);
-        return;
-      }
       if (key === "discord") return; // identity comes from the verified session, not the form
       answers[key] = value;
     });
-    answers.regler_accepteret = rules;
 
     var submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
