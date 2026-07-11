@@ -464,14 +464,16 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 /* =========================================================
    Application category cards
    ========================================================= */
-.apply-card-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; }
+.apply-card-grid{ display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
 
 .apply-card{
   display: flex; flex-direction: column; position: relative;
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius-l);
-  padding: 30px 32px; transition: background-color .25s var(--ease), border-color .25s var(--ease);
+  flex: 0 1 calc((100% - 40px) / 3);
+  min-height: 300px;
+  background: var(--bg-2); border: 1.5px solid var(--line-strong); border-radius: var(--radius-l);
+  padding: 38px 36px; transition: background-color .25s var(--ease), border-color .25s var(--ease);
 }
-.apply-card:hover{ background: var(--bg-3); border-color: var(--line-strong); }
+.apply-card:hover{ background: var(--bg-3); border-color: var(--orange); }
 
 .apply-card-disabled{
   opacity: .5; pointer-events: none !important; cursor: not-allowed !important; user-select: none;
@@ -500,7 +502,11 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 .apply-card-note{ display: block; margin-top: 8px; font-size: 12px; color: var(--gray-dim); }
 
 @media (max-width: 900px){
-  .apply-card-grid{ grid-template-columns: 1fr 1fr; }
+  .apply-card{ flex-basis: calc((100% - 20px) / 2); min-height: 260px; padding: 32px 28px; }
+}
+@media (max-width: 560px){
+  .apply-card-grid{ gap: 14px; }
+  .apply-card{ flex-basis: 100%; min-height: 0; padding: 28px 26px; }
 }
 
 .apply-back{
@@ -510,9 +516,6 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 .apply-back svg{ width: 15px; height: 15px; }
 .apply-back:hover{ color: var(--white); }
 
-@media (max-width: 640px){
-  .apply-card-row{ grid-template-columns: 1fr; }
-}
 
 /* =========================================================
    Application form

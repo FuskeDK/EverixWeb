@@ -1,7 +1,6 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/hjem", "destination": "/index.html" },
     { "source": "/ansog", "destination": "/ansog.html" },
     { "source": "/regler", "destination": "/regler.html" }
   ]
