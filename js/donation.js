@@ -1,13 +1,11 @@
 (function () {
   "use strict";
 
-  // TEST MODE Stripe Payment Links - swap for live links (buy.stripe.com/... without "/test_")
-  // once the flow is verified end-to-end.
   var STRIPE_LINKS = {
-    spark: "https://buy.stripe.com/test_4gM5kE1Em8qUd8W3ZrfjG00",
-    flame: "https://buy.stripe.com/test_fZu6oI96O4aE0maeE5fjG01",
-    blaze: "https://buy.stripe.com/test_dRmaEYgzgfTm0ma3ZrfjG02",
-    inferno: "https://buy.stripe.com/test_14A3cwfvc4aEed0brTfjG03",
+    spark: "https://buy.stripe.com/4gM28tdfta1vfwGaCt3F600",
+    flame: "https://buy.stripe.com/14A00ldft2z384e8ul3F601",
+    blaze: "https://buy.stripe.com/9B66oJ1wL1uZgAKeSJ3F602",
+    inferno: "https://buy.stripe.com/28E4gB7V94HbfwG3a13F603",
   };
 
   document.querySelectorAll(".donate-btn").forEach(function (btn) {
