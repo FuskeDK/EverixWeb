@@ -91,6 +91,15 @@
         })
           .then(function (r) {
             if (!r.ok) throw new Error("decision_failed");
+            return r.json();
+          })
+          .then(function (data) {
+            if (data.warning === "role_grant_failed") {
+              alert(
+                "Ansøgningen blev godkendt og brugeren fik en DM, men rollen kunne ikke gives. " +
+                  "Tjek at botten's egen rolle står højere end rollen i Server Settings > Roles."
+              );
+            }
             return load();
           })
           .catch(function () {
