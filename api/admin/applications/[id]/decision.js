@@ -1,16 +1,11 @@
-import { getAdminSession } from "../../../../lib/session.js";
+import { getUserSession, getAdminSession } from "../../../../lib/session.js";
 import { getSupabase } from "../../../../lib/supabase.js";
 import { sendDiscordDM, addDiscordRole } from "../../../../lib/discord.js";
+import { hasCategoryAccess } from "../../../../lib/roles.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "method_not_allowed" });
-    return;
-  }
-
-  const admin = getAdminSession(req);
-  if (!admin) {
-    res.status(401).json({ error: "not_admin" });
     return;
   }
 
@@ -33,11 +28,21 @@ export default async function handler(req, res) {
     return;
   }
 
+  const allowed = await hasCategoryAccess(req, application.category);
+  if (!allowed) {
+    res.status(403).json({ error: "forbidden" });
+    return;
+  }
+
+  const admin = getAdminSession(req);
+  const user = getUserSession(req);
+  const reviewedBy = admin ? admin.email : user ? user.discordUsername : "unknown";
+
   const status = action === "approve" ? "approved" : "rejected";
 
   const { error: updateError } = await supabase
     .from("applications")
-    .update({ status, reviewed_at: new Date().toISOString(), reviewed_by: admin.email })
+    .update({ status, reviewed_at: new Date().toISOString(), reviewed_by: reviewedBy })
     .eq("id", id);
 
   if (updateError) {
@@ -56,7 +61,7 @@ export default async function handler(req, res) {
     // DM can fail if the user has DMs closed - don't block the decision on it.
   }
 
-  if (action === "approve") {
+  if (action === "approve" && application.category === "Allowlist") {
     try {
       await addDiscordRole(application.discord_id);
     } catch (err) {

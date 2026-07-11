@@ -3,6 +3,12 @@
   "rewrites": [
     { "source": "/ansog", "destination": "/ansog.html" },
     { "source": "/regler", "destination": "/regler.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/politi", "destination": "/politi.html" },
+    { "source": "/ems", "destination": "/ems.html" },
+    { "source": "/firma", "destination": "/firma.html" },
+    { "source": "/bande", "destination": "/bande.html" },
+    { "source": "/allowlist", "destination": "/allowlist.html" },
+    { "source": "/donation", "destination": "/donation.html" }
   ]
 }

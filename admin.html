@@ -22,14 +22,10 @@
     <a href="/" class="brand">
       <span class="brand-name">Everix</span>
     </a>
-    <nav class="main-nav" aria-label="Hovednavigation">
-      <a href="/">Hjem</a>
-      <a href="/regler">Regler</a>
-      <a href="/ansog">Ansøg</a>
+    <nav class="main-nav" aria-label="Admin navigation">
+      <button type="button" class="admin-nav-btn is-active" data-admin-tab="ansogninger">Ansøgninger</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="regler">Regler</button>
     </nav>
-    <div class="header-actions">
-      <a class="btn-pill" href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener">Discord</a>
-    </div>
   </div>
 </header>
 
@@ -38,7 +34,7 @@
   <section class="page-hero">
     <div class="wrap">
       <p class="eyebrow">Admin</p>
-      <h1 class="page-title">Ansøgninger</h1>
+      <h1 class="page-title" id="adminPageTitle">Ansøgninger</h1>
     </div>
   </section>
 
@@ -58,8 +54,8 @@
     </div>
   </section>
 
-  <!-- ADMIN PANEL -->
-  <section class="section" id="adminPanel" hidden>
+  <!-- ANSØGNINGER TAB -->
+  <section class="section" id="adminTabAnsogninger">
     <div class="wrap">
       <div class="apply-user-bar">
         <span>Logget ind som admin</span>
@@ -68,14 +64,47 @@
 
       <div class="admin-filters" id="adminFilters">
         <button type="button" class="admin-filter-btn is-active" data-filter="Alle">Alle</button>
+        <button type="button" class="admin-filter-btn" data-filter="Allowlist">Allowlist</button>
         <button type="button" class="admin-filter-btn" data-filter="Politi">Politi</button>
         <button type="button" class="admin-filter-btn" data-filter="EMS">EMS</button>
         <button type="button" class="admin-filter-btn" data-filter="Firma">Firma</button>
         <button type="button" class="admin-filter-btn" data-filter="Bande">Bande</button>
       </div>
 
-      <div id="adminList" class="admin-list"></div>
-      <p id="adminEmpty" class="apply-gate-text" hidden>Ingen ansøgninger endnu.</p>
+      <div class="admin-filters">
+        <button type="button" class="admin-filter-btn staff-tab-btn is-active" data-tab="aktive">Aktive</button>
+        <button type="button" class="admin-filter-btn staff-tab-btn" data-tab="historik">Historik</button>
+      </div>
+
+      <div id="adminTabAktive">
+        <div id="adminActiveList" class="admin-list"></div>
+      </div>
+      <div id="adminTabHistorik" hidden>
+        <input type="text" id="adminSearch" class="staff-search" placeholder="Søg efter Discord brugernavn...">
+        <div id="adminHistoryList" class="admin-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGLER TAB -->
+  <section class="section" id="adminTabRegler" hidden>
+    <div class="wrap">
+      <div id="rulesGroups"></div>
+
+      <div class="form-panel" id="addGroupPanel">
+        <p class="form-panel-label">Tilføj ny regelgruppe</p>
+        <div class="form-panel-grid">
+          <label class="field field-compact">
+            <span>Navn</span>
+            <input type="text" id="newGroupName" placeholder="F.eks. Køretøjer">
+          </label>
+          <label class="field field-compact">
+            <span>Bogstav (valgfrit)</span>
+            <input type="text" id="newGroupCode" maxlength="1" placeholder="F.eks. K">
+          </label>
+        </div>
+        <button type="button" class="btn btn-primary btn-small" id="addGroupBtn">Tilføj gruppe</button>
+      </div>
     </div>
   </section>
 
