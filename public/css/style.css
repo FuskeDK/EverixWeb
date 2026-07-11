@@ -748,7 +748,7 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
   transition: border-color .2s var(--ease), transform .2s var(--ease);
 }
 .donation-card:hover{ border-color: var(--line-strong); transform: translateY(-3px); }
-.donation-card-popular{ border-color: var(--orange); background: rgba(255,90,31,0.06); }
+.donation-card-popular{ background: rgba(255,90,31,0.06); }
 .donation-badge{
   position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
   background: var(--orange); color: #fff8f3; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;

@@ -1,13 +1,14 @@
-import { createOAuthState, verifyOAuthState, createUserSession } from "../lib/session.js";
+import { createOAuthState, verifyOAuthState, createUserSession, setOAuthReturn, consumeOAuthReturn } from "../lib/session.js";
 import { exchangeDiscordCode, getDiscordUser } from "../lib/discord.js";
 
 const REDIRECT_URI = "https://everix-chi.vercel.app/api/discord-callback";
 
 export default async function handler(req, res) {
-  const { code, state } = req.query;
+  const { code, state, return: returnPath } = req.query;
 
   if (!code) {
     const newState = createOAuthState(res, "discord");
+    if (returnPath) setOAuthReturn(res, "discord", returnPath);
     const params = new URLSearchParams({
       client_id: process.env.DISCORD_CLIENT_ID,
       redirect_uri: REDIRECT_URI,
@@ -20,8 +21,10 @@ export default async function handler(req, res) {
     return;
   }
 
+  const destination = consumeOAuthReturn(req, res, "discord", "/ansog");
+
   if (!state || !verifyOAuthState(req, res, "discord", state)) {
-    res.writeHead(302, { Location: "/ansog?error=login_failed" });
+    res.writeHead(302, { Location: `${destination}?error=login_failed` });
     res.end();
     return;
   }
@@ -35,10 +38,10 @@ export default async function handler(req, res) {
       discordUsername: user.username,
     });
 
-    res.writeHead(302, { Location: "/ansog" });
+    res.writeHead(302, { Location: destination });
     res.end();
   } catch (err) {
-    res.writeHead(302, { Location: "/ansog?error=login_failed" });
+    res.writeHead(302, { Location: `${destination}?error=login_failed` });
     res.end();
   }
 }
