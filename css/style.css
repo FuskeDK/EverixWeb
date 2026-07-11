@@ -477,7 +477,7 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
   background: var(--bg-2);
   padding: 24px 28px; transition: background-color .25s var(--ease), border-color .25s var(--ease);
 }
-.apply-card:hover{ background: rgba(224, 224, 224, 0.18); border-color: var(--orange); }
+.apply-card:hover{ background: rgba(224, 224, 224, 0.18); border-color: rgba(255,255,255,0.32); }
 
 .apply-card-disabled{
   opacity: .5; pointer-events: none !important; cursor: not-allowed !important; user-select: none;
