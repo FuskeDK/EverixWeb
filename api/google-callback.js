@@ -1,5 +1,7 @@
 import { verifyOAuthState, createAdminSession } from "../lib/session.js";
 
+const REDIRECT_URI = "https://everix-chi.vercel.app/api/google-callback";
+
 export default async function handler(req, res) {
   const { code, state } = req.query;
 
@@ -9,7 +11,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    const redirectUri = `https://${req.headers.host}/api/google-callback`;
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -18,7 +19,7 @@ export default async function handler(req, res) {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         grant_type: "authorization_code",
         code,
-        redirect_uri: redirectUri,
+        redirect_uri: REDIRECT_URI,
       }),
     });
     if (!tokenRes.ok) throw new Error("token exchange failed");

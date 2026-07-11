@@ -1,10 +1,12 @@
 import { createOAuthState } from "../lib/session.js";
 
+const REDIRECT_URI = "https://everix-chi.vercel.app/api/discord-callback";
+
 export default function handler(req, res) {
   const state = createOAuthState(res, "discord");
   const params = new URLSearchParams({
     client_id: process.env.DISCORD_CLIENT_ID,
-    redirect_uri: `https://${req.headers.host}/api/discord-callback`,
+    redirect_uri: REDIRECT_URI,
     response_type: "code",
     scope: "identify",
     state,

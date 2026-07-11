@@ -1,10 +1,12 @@
 import { createOAuthState } from "../lib/session.js";
 
+const REDIRECT_URI = "https://everix-chi.vercel.app/api/google-callback";
+
 export default function handler(req, res) {
   const state = createOAuthState(res, "google");
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID,
-    redirect_uri: `https://${req.headers.host}/api/google-callback`,
+    redirect_uri: REDIRECT_URI,
     response_type: "code",
     scope: "openid email",
     state,

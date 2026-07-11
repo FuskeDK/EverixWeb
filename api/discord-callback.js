@@ -1,6 +1,8 @@
 import { verifyOAuthState, createUserSession } from "../lib/session.js";
 import { exchangeDiscordCode, getDiscordUser } from "../lib/discord.js";
 
+const REDIRECT_URI = "https://everix-chi.vercel.app/api/discord-callback";
+
 export default async function handler(req, res) {
   const { code, state } = req.query;
 
@@ -11,8 +13,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const redirectUri = `https://${req.headers.host}/api/discord-callback`;
-    const tokens = await exchangeDiscordCode(code, redirectUri);
+    const tokens = await exchangeDiscordCode(code, REDIRECT_URI);
     const user = await getDiscordUser(tokens.access_token);
 
     createUserSession(res, {
