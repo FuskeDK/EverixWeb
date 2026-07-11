@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Everix</title>
+<meta name="description" content="Admin panel for Everix ansøgninger.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<a class="skip-link" href="#hovedindhold">Spring til indhold</a>
+
+<header class="site-header" id="site-header">
+  <div class="wrap header-inner">
+    <a href="/" class="brand">
+      <span class="brand-name">Everix</span>
+    </a>
+    <nav class="main-nav" aria-label="Hovednavigation">
+      <a href="/">Hjem</a>
+      <a href="/regler">Regler</a>
+      <a href="/ansog">Ansøg</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn-pill" href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener">Discord</a>
+    </div>
+  </div>
+</header>
+
+<main id="hovedindhold">
+
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Admin</p>
+      <h1 class="page-title">Ansøgninger</h1>
+    </div>
+  </section>
+
+  <!-- LOGIN GATE -->
+  <section class="section apply-section" id="adminLoginGate" hidden>
+    <div class="wrap apply-wrap apply-gate">
+      <p class="apply-gate-text">Log ind med den autoriserede Google-konto for at se og behandle ansøgninger.</p>
+      <a href="/api/google-login" class="btn btn-primary btn-large">Log ind med Google</a>
+    </div>
+  </section>
+
+  <!-- DENIED -->
+  <section class="section apply-section" id="adminDenied" hidden>
+    <div class="wrap apply-wrap apply-gate">
+      <p class="apply-gate-text">Denne konto har ikke adgang til admin-panelet.</p>
+      <a href="/api/google-login" class="btn btn-outline btn-large">Prøv en anden konto</a>
+    </div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <section class="section" id="adminPanel" hidden>
+    <div class="wrap">
+      <div class="apply-user-bar">
+        <span>Logget ind som admin</span>
+        <a href="/api/logout">Log ud</a>
+      </div>
+
+      <div id="adminList" class="admin-list"></div>
+      <p id="adminEmpty" class="apply-gate-text" hidden>Ingen ansøgninger endnu.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-bottom">
+    <span>© 2026 Everix Roleplay</span>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

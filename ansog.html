@@ -53,9 +53,24 @@
     </div>
   </section>
 
+  <!-- LOGIN GATE (shown when not logged in with Discord) -->
+  <section class="section apply-section" id="loginGate" hidden>
+    <div class="wrap apply-wrap apply-gate">
+      <p class="eyebrow">Log ind for at ansøge</p>
+      <h2 class="section-title">Du skal logge ind med Discord</h2>
+      <p class="apply-gate-text">For at forhindre snyd og ansøgninger under falsk navn kræver alle ansøgninger login med Discord. Dit brugernavn hentes automatisk, når du er logget ind.</p>
+      <a href="/api/discord-login" class="btn btn-primary btn-large">Log ind med Discord</a>
+    </div>
+  </section>
+
   <!-- CARD SELECTION -->
-  <section class="section apply-section" id="applyCards">
+  <section class="section apply-section" id="applyCards" hidden>
     <div class="wrap apply-wrap">
+
+      <div class="apply-user-bar" id="applyUserBar">
+        <span>Logget ind som <strong id="applyUsername"></strong></span>
+        <a href="/api/logout">Log ud</a>
+      </div>
 
       <div class="apply-card-grid">
         <div class="apply-card apply-card-disabled" aria-disabled="true" tabindex="-1">
@@ -129,7 +144,7 @@
               <div class="form-panel-grid">
                 <label class="field field-compact">
                   <span>Discord brugernavn</span>
-                  <input type="text" name="discord" placeholder="dit.brugernavn" required>
+                  <input type="text" name="discord" id="discordUsernameField" readonly required>
                 </label>
 
                 <label class="field field-compact">
@@ -137,20 +152,6 @@
                   <input type="number" name="alder" min="13" max="99" placeholder="18" required>
                 </label>
               </div>
-
-              <label class="field field-compact">
-                <span>Har du en, der kan vouche for dig? (kun hvis du er under 18 år)</span>
-                <select name="voucher" id="voucherSelect">
-                  <option value="">Vælg</option>
-                  <option value="ja">Ja</option>
-                  <option value="nej">Nej, jeg er 18 år eller ældre</option>
-                </select>
-              </label>
-
-              <label class="field field-compact" id="voucherIdField" hidden>
-                <span>Discord-ID/brugernavn på den oplyste voucher</span>
-                <input type="text" name="voucherId" placeholder="voucher.brugernavn">
-              </label>
             </div>
           </div>
         </div>

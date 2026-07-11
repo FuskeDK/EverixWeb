@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/ansog", "destination": "/ansog.html" },
-    { "source": "/regler", "destination": "/regler.html" }
+    { "source": "/regler", "destination": "/regler.html" },
+    { "source": "/admin", "destination": "/admin.html" }
   ]
 }
