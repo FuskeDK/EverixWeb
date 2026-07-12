@@ -120,6 +120,25 @@
       </div>
 
       <p class="donation-note">Donationer giver kosmetiske og bekvemmelighedsfordele. Ingen fordel påvirker roleplay-balancen eller giver adgang, du ikke selv kunne opnå ved at spille.</p>
+
+      <div class="form-panel custom-donation-panel">
+        <p class="form-panel-label">Vælg selv beløb</p>
+        <div class="form-panel-grid">
+          <label class="field field-compact">
+            <span>Beløb (kr.)</span>
+            <input type="number" id="customAmount" min="10" max="10000" step="1" placeholder="50">
+          </label>
+          <label class="field field-compact">
+            <span>Hyppighed</span>
+            <select id="customFrequency">
+              <option value="month">Hver måned</option>
+              <option value="once">Engangsbetaling</option>
+            </select>
+          </label>
+        </div>
+        <button type="button" id="customDonateBtn" class="btn btn-primary btn-large">Donér valgfrit beløb</button>
+        <p class="form-hint" id="customDonateHint">Mellem 10 kr. og 10.000 kr.</p>
+      </div>
     </div>
   </section>
 

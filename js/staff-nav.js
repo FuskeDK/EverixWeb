@@ -9,7 +9,7 @@
     Allowlist: "/allowlist",
   };
 
-  fetch("/api/my-staff-categories")
+  fetch("/api/me")
     .then(function (r) { return r.json(); })
     .then(function (data) {
       var categories = data.categories || [];

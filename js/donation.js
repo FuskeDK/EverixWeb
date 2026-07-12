@@ -29,4 +29,49 @@
         });
     });
   });
+
+  var customBtn = document.getElementById("customDonateBtn");
+  var customAmount = document.getElementById("customAmount");
+  var customFrequency = document.getElementById("customFrequency");
+  var customHint = document.getElementById("customDonateHint");
+
+  if (customBtn) {
+    customBtn.addEventListener("click", function () {
+      var amount = parseInt(customAmount.value, 10);
+      if (!amount || amount < 10 || amount > 10000) {
+        customHint.textContent = "Indtast et beløb mellem 10 kr. og 10.000 kr.";
+        customHint.style.color = "var(--orange)";
+        return;
+      }
+      customHint.style.color = "";
+      customHint.textContent = "Mellem 10 kr. og 10.000 kr.";
+
+      fetch("/api/me")
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data.loggedIn) {
+            window.location.href = "/api/discord-callback?return=" + encodeURIComponent("/donation");
+            return;
+          }
+          customBtn.disabled = true;
+          return fetch("/api/create-donation", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ amount: amount, frequency: customFrequency.value }),
+          })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+              customBtn.disabled = false;
+              if (!data.url) throw new Error("no_url");
+              window.open(data.url, "_blank", "noopener");
+            });
+        })
+        .catch(function () {
+          customBtn.disabled = false;
+          customHint.textContent = "Der gik noget galt. Prøv igen.";
+          customHint.style.color = "var(--orange)";
+        });
+    });
+  }
 })();
