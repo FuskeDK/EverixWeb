@@ -28,7 +28,7 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
 
   // ---------- Kategorier ----------
   var categoryToggleGrid = document.getElementById("categoryToggleGrid");
-  var ALL_CATEGORIES = ["Allowlist", "Politi", "EMS", "Firma", "Bande"];
+  var ALL_CATEGORIES = ["Whitelist", "Politi", "EMS", "Firma", "Bande"];
 
   function renderCategoryToggles(settings) {
     categoryToggleGrid.innerHTML = ALL_CATEGORIES.map(function (cat) {

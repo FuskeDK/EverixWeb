@@ -84,7 +84,7 @@ export default async function handler(req, res) {
     // DM can fail if the user has DMs closed - don't block the decision on it.
   }
 
-  if (action === "approve" && application.category === "Allowlist") {
+  if (action === "approve" && application.category === "Whitelist") {
     try {
       await addDiscordRole(application.discord_id);
     } catch (err) {

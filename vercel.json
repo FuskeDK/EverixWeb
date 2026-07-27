@@ -8,7 +8,7 @@
     { "source": "/ems", "destination": "/api/staff-page?category=EMS" },
     { "source": "/firma", "destination": "/api/staff-page?category=Firma" },
     { "source": "/bande", "destination": "/api/staff-page?category=Bande" },
-    { "source": "/allowlist", "destination": "/api/staff-page?category=Allowlist" },
+    { "source": "/whitelist", "destination": "/api/staff-page?category=Whitelist" },
     { "source": "/donation", "destination": "/donation.html" },
     { "source": "/tak", "destination": "/tak.html" },
     { "source": "/privatlivspolitik", "destination": "/privatlivspolitik.html" },

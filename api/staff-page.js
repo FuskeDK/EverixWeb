@@ -5,7 +5,7 @@ const CATEGORY_ROLE_NAMES = {
   EMS: "Sundhedsvæsen Ledelse",
   Firma: "Firma Ansvarlig",
   Bande: "Bande Ansvarlig",
-  Allowlist: "Whitelist Ansvarlig",
+  Whitelist: "Whitelist Ansvarlig",
 };
 
 const NOT_FOUND_HTML = `<!doctype html>

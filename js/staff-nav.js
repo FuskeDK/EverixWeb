@@ -6,7 +6,7 @@
     EMS: "/ems",
     Firma: "/firma",
     Bande: "/bande",
-    Allowlist: "/allowlist",
+    Whitelist: "/whitelist",
   };
 
   fetch("/api/me")
