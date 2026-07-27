@@ -2,10 +2,10 @@
   "use strict";
 
   var STRIPE_LINKS = {
-    spark: "https://buy.stripe.com/4gM28tdfta1vfwGaCt3F600",
-    flame: "https://buy.stripe.com/14A00ldft2z384e8ul3F601",
-    blaze: "https://buy.stripe.com/9B66oJ1wL1uZgAKeSJ3F602",
-    inferno: "https://buy.stripe.com/28E4gB7V94HbfwG3a13F603",
+    spark: "https://buy.stripe.com/test_fZufZi5UCaz26KybrTfjG04",
+    flame: "https://buy.stripe.com/test_9B614oaaS8qU3ymcvXfjG05",
+    blaze: "https://buy.stripe.com/test_fZu7sM3MugXq2ui67zfjG06",
+    inferno: "https://buy.stripe.com/test_cNi3cwcj0ePib0O0NffjG07",
   };
 
   document.querySelectorAll(".donate-btn").forEach(function (btn) {

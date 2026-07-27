@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { addRoleToUser } from "../lib/discord.js";
+import { addRoleToUser, sendChannelMessage } from "../lib/discord.js";
 
 export const config = { api: { bodyParser: false } };
 
@@ -11,7 +11,11 @@ const TIER_ROLES = {
   custom: "1531352811055354127",
 };
 
+const TIER_NAMES = { spark: "Spark", flame: "Flame", blaze: "Blaze", inferno: "Inferno" };
+
 const AMOUNT_TIER = { 2900: "spark", 5900: "flame", 9900: "blaze", 14900: "inferno" };
+
+const DONATION_ANNOUNCE_CHANNEL_ID = "1531015872938774659";
 
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
@@ -65,6 +69,16 @@ export default async function handler(req, res) {
         await addRoleToUser(discordId, roleId);
       } catch {
         // Role grant can fail (e.g. bot's role ranked below the target role) - don't fail the webhook ack.
+      }
+
+      try {
+        const message =
+          tier === "custom"
+            ? `Tusind tak til <@${discordId}> som har valgt at donere os ${Math.round(session.amount_total / 100)} kr!`
+            : `Tusind tak til <@${discordId}> som har valgt at donere os og få **${TIER_NAMES[tier]}**!`;
+        await sendChannelMessage(DONATION_ANNOUNCE_CHANNEL_ID, message);
+      } catch {
+        // Announcement failing shouldn't fail the webhook ack.
       }
     }
   }

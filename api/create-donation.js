@@ -2,7 +2,7 @@ import { getUserSession } from "../lib/session.js";
 
 const MIN_KR = 10;
 const MAX_KR = 10000;
-const PRODUCT_ID = "prod_UsDmYbnFRyg19g";
+const PRODUCT_ID = "prod_Uxp4hNmefznZEB";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
