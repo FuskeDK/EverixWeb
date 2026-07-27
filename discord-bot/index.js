@@ -53,6 +53,13 @@ client.once("ready", async () => {
   } catch (err) {
     console.error("Failed to register commands:", err);
   }
+
+  const { error: dbCheckError } = await supabase.from("donation_codes").select("code").limit(1);
+  if (dbCheckError) {
+    console.error("Supabase connectivity check FAILED - donation code lookups will not work:", dbCheckError);
+  } else {
+    console.log("Supabase connectivity check OK.");
+  }
 });
 
 client.on("error", (err) => console.error("Client error:", err));
@@ -274,12 +281,20 @@ client.on("interactionCreate", async (interaction) => {
     if (interaction.isModalSubmit() && interaction.customId === "donation_code_modal") {
       const code = interaction.fields.getTextInputValue("donation_code_input").trim().toUpperCase();
 
-      const { data: codeRow } = await supabase
+      const { data: codeRow, error: codeError } = await supabase
         .from("donation_codes")
         .select("status")
         .eq("code", code)
         .maybeSingle();
 
+      if (codeError) {
+        console.error("donation_codes lookup failed:", codeError);
+        await interaction.reply({
+          content: "Der skete en teknisk fejl under opslag af koden. Prøv igen, eller kontakt en admin (tjek bottens konsol).",
+          ephemeral: true,
+        });
+        return;
+      }
       if (!codeRow) {
         await interaction.reply({ content: "Denne kode er ugyldig og eksisterer ikke.", ephemeral: true });
         return;
