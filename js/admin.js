@@ -8,19 +8,69 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
   var pageTitle = document.getElementById("adminPageTitle");
 
   var tabAnsogninger = document.getElementById("adminTabAnsogninger");
+  var tabKategorier = document.getElementById("adminTabKategorier");
   var tabRegler = document.getElementById("adminTabRegler");
   var navButtons = document.querySelectorAll(".admin-nav-btn");
+  var tabTitles = { ansogninger: "Ansøgninger", kategorier: "Kategorier", regler: "Regler" };
 
   navButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var tab = btn.getAttribute("data-admin-tab");
       navButtons.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
       tabAnsogninger.hidden = tab !== "ansogninger";
+      tabKategorier.hidden = tab !== "kategorier";
       tabRegler.hidden = tab !== "regler";
-      pageTitle.textContent = tab === "regler" ? "Regler" : "Ansøgninger";
+      pageTitle.textContent = tabTitles[tab] || "Ansøgninger";
       if (tab === "regler") loadRules();
+      if (tab === "kategorier") loadCategorySettings();
     });
   });
+
+  // ---------- Kategorier ----------
+  var categoryToggleGrid = document.getElementById("categoryToggleGrid");
+  var ALL_CATEGORIES = ["Allowlist", "Politi", "EMS", "Firma", "Bande"];
+
+  function renderCategoryToggles(settings) {
+    categoryToggleGrid.innerHTML = ALL_CATEGORIES.map(function (cat) {
+      var enabled = Boolean(settings[cat]);
+      return (
+        '<div class="staff-toggle-row" data-category="' + cat + '">' +
+        "<span class=\"staff-toggle-label\">" + cat + " &middot; " + (enabled ? "Åben for ansøgninger" : "Lukket for ansøgninger") + "</span>" +
+        '<button type="button" class="staff-toggle' + (enabled ? " is-on" : "") + '" data-toggle-category="' + cat + '" aria-label="Slå ' + cat + ' til/fra"></button>' +
+        "</div>"
+      );
+    }).join("");
+
+    categoryToggleGrid.querySelectorAll("[data-toggle-category]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var cat = btn.getAttribute("data-toggle-category");
+        var next = !btn.classList.contains("is-on");
+        btn.disabled = true;
+        fetch("/api/category-settings", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ category: cat, enabled: next }),
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error("toggle_failed");
+            return loadCategorySettings();
+          })
+          .catch(function () {
+            alert("Kunne ikke ændre status. Prøv igen.");
+          })
+          .finally(function () {
+            btn.disabled = false;
+          });
+      });
+    });
+  }
+
+  function loadCategorySettings() {
+    return fetch("/api/category-settings")
+      .then(function (r) { return r.json(); })
+      .then(renderCategoryToggles);
+  }
 
   // ---------- Ansøgninger ----------
   var filters = document.getElementById("adminFilters");
@@ -67,7 +117,7 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
     var answered = byCategory(allApplications.filter(function (a) { return a.status !== "pending"; })).filter(function (a) {
       return !query || a.discord_username.toLowerCase().indexOf(query) !== -1;
     });
-    renderApplicationList(historyList, answered, false);
+    renderApplicationList(historyList, answered, true, loadApplications);
   }
 
   function loadApplications() {
@@ -115,11 +165,18 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
               '<div class="rule-check-item" data-rule-id="' +
               r.id +
               '">' +
-              '<span><strong>' +
+              '<span class="rule-view"><strong>' +
               escapeHtml(r.title) +
               "</strong> " +
               escapeHtml(r.body) +
               "</span>" +
+              '<span class="rule-edit" hidden>' +
+              '<input type="text" class="edit-rule-title" value="' + escapeHtml(r.title) + '">' +
+              '<input type="text" class="edit-rule-body" value="' + escapeHtml(r.body) + '">' +
+              "</span>" +
+              '<button type="button" class="btn btn-outline btn-small" data-edit-rule="' +
+              r.id +
+              '">Redigér</button>' +
               '<button type="button" class="btn btn-outline btn-small" data-delete-rule="' +
               r.id +
               '">Slet</button>' +
@@ -157,6 +214,24 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
       })
       .join("");
 
+    rulesGroups.querySelectorAll("[data-edit-rule]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var row = btn.closest(".rule-check-item");
+        var view = row.querySelector(".rule-view");
+        var edit = row.querySelector(".rule-edit");
+        var editing = !edit.hidden;
+        if (!editing) {
+          view.hidden = true;
+          edit.hidden = false;
+          btn.textContent = "Gem";
+          return;
+        }
+        var title = row.querySelector(".edit-rule-title").value.trim();
+        var body = row.querySelector(".edit-rule-body").value.trim();
+        if (!title || !body) return;
+        ruleApi("PUT", "item", { id: btn.getAttribute("data-edit-rule"), fields: { title: title, body: body } }).then(loadRules);
+      });
+    });
     rulesGroups.querySelectorAll("[data-delete-rule]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         if (!confirm("Slet denne regel?")) return;

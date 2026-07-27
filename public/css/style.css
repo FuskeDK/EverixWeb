@@ -700,6 +700,22 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 .staff-toggle.is-on{ background: var(--green); border-color: var(--green); }
 .staff-toggle.is-on::after{ transform: translateX(20px); background: #fff8f3; }
 
+.rule-check-item{
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px 0; border-bottom: 1px solid var(--line);
+}
+.rule-check-item:last-of-type{ border-bottom: none; }
+.rule-view{ flex: 1 1 260px; font-size: 14px; line-height: 1.6; color: var(--white); }
+.rule-view strong{ color: var(--orange); }
+.rule-edit{ display: flex; gap: 10px; flex: 1 1 100%; }
+.rule-edit input{
+  flex: 1; background: var(--bg-2); border: 1px solid var(--line-strong); border-radius: var(--radius-s);
+  padding: 8px 12px; color: var(--white); font-family: var(--font-body); font-size: 14px;
+}
+.rule-edit input:focus{ border-color: var(--orange); outline: none; }
+
+.category-toggle-grid{ display: flex; flex-direction: column; gap: 12px; }
+
 .staff-search{
   width: 100%; margin-bottom: 16px;
   background: var(--bg-2); border: 1px solid var(--line-strong); border-radius: var(--radius-s);

@@ -25,6 +25,7 @@
     </a>
     <nav class="main-nav" aria-label="Admin navigation">
       <button type="button" class="admin-nav-btn is-active" data-admin-tab="ansogninger">Ansøgninger</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="kategorier">Kategorier</button>
       <button type="button" class="admin-nav-btn" data-admin-tab="regler">Regler</button>
     </nav>
   </div>
@@ -84,6 +85,14 @@
         <input type="text" id="adminSearch" class="staff-search" placeholder="Søg efter Discord brugernavn...">
         <div id="adminHistoryList" class="admin-list"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- KATEGORIER TAB -->
+  <section class="section" id="adminTabKategorier" hidden>
+    <div class="wrap">
+      <p class="apply-gate-text" style="margin-bottom: 20px;">Slå ansøgningskategorier til eller fra. Lukkede kategorier kan ikke søges på <a href="/ansog" style="color: var(--orange); text-decoration: underline;">/ansog</a>, uanset hvem der prøver.</p>
+      <div class="category-toggle-grid" id="categoryToggleGrid"></div>
     </div>
   </section>
 

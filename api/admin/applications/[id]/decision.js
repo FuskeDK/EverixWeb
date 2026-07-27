@@ -4,18 +4,12 @@ import { sendDiscordDM, addDiscordRole } from "../../../../lib/discord.js";
 import { hasCategoryAccess } from "../../../../lib/roles.js";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== "POST" && req.method !== "DELETE") {
     res.status(405).json({ error: "method_not_allowed" });
     return;
   }
 
   const { id } = req.query;
-  const { action } = req.body || {};
-  if (action !== "approve" && action !== "reject") {
-    res.status(400).json({ error: "invalid_action" });
-    return;
-  }
-
   const supabase = getSupabase();
   const { data: application, error: fetchError } = await supabase
     .from("applications")
@@ -31,6 +25,35 @@ export default async function handler(req, res) {
   const allowed = await hasCategoryAccess(req, application.category);
   if (!allowed) {
     res.status(403).json({ error: "forbidden" });
+    return;
+  }
+
+  if (req.method === "DELETE") {
+    const { error: deleteError } = await supabase.from("applications").delete().eq("id", id);
+    if (deleteError) {
+      res.status(500).json({ error: "delete_failed" });
+      return;
+    }
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  const { action } = req.body || {};
+  if (action !== "approve" && action !== "reject" && action !== "reset") {
+    res.status(400).json({ error: "invalid_action" });
+    return;
+  }
+
+  if (action === "reset") {
+    const { error: resetError } = await supabase
+      .from("applications")
+      .update({ status: "pending", reviewed_at: null, reviewed_by: null })
+      .eq("id", id);
+    if (resetError) {
+      res.status(500).json({ error: "update_failed" });
+      return;
+    }
+    res.status(200).json({ ok: true });
     return;
   }
 

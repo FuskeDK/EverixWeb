@@ -40,17 +40,24 @@ export function renderApplicationList(container, applications, showActions, onDe
 
   container.innerHTML = applications
     .map(function (app) {
-      var actions =
-        showActions && app.status === "pending"
-          ? '<div class="admin-actions">' +
+      var actions = "";
+      if (showActions) {
+        if (app.status === "pending") {
+          actions +=
             '<button class="btn btn-primary btn-small" data-action="approve" data-id="' +
             app.id +
             '">Godkend</button>' +
             '<button class="btn btn-outline btn-small" data-action="reject" data-id="' +
             app.id +
-            '">Afvis</button>' +
-            "</div>"
-          : "";
+            '">Afvis</button>';
+        } else {
+          actions +=
+            '<button class="btn btn-outline btn-small" data-action="reset" data-id="' + app.id + '">Genåbn</button>';
+        }
+        actions +=
+          '<button class="btn btn-ghost btn-small" data-action="delete" data-id="' + app.id + '">Slet</button>';
+        actions = '<div class="admin-actions">' + actions + "</div>";
+      }
       return (
         '<article class="admin-card admin-status-' +
         app.status +
@@ -102,13 +109,19 @@ export function renderApplicationList(container, applications, showActions, onDe
       e.stopPropagation();
       var id = btn.getAttribute("data-id");
       var action = btn.getAttribute("data-action");
+      if (action === "delete" && !confirm("Slet denne ansøgning permanent?")) return;
       btn.disabled = true;
-      fetch("/api/admin/applications/" + id + "/decision", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ action: action }),
-      })
+      fetch(
+        "/api/admin/applications/" + id + "/decision",
+        action === "delete"
+          ? { method: "DELETE", credentials: "include" }
+          : {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ action: action }),
+            }
+      )
         .then(function (r) {
           if (!r.ok) throw new Error("decision_failed");
           return r.json();

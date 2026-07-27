@@ -47,7 +47,7 @@ import { renderApplicationList } from "./applications-ui.js";
       if (!query) return true;
       return a.discord_username.toLowerCase().indexOf(query) !== -1;
     });
-    renderApplicationList(historyList, answered, false);
+    renderApplicationList(historyList, answered, true, load);
   }
 
   if (searchInput) {
