@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
-import { addRoleToUser, sendChannelMessage } from "../lib/discord.js";
+import { addRoleToUser, sendChannelMessage, sendDiscordDM } from "../lib/discord.js";
+import { getSupabase } from "../lib/supabase.js";
 
 export const config = { api: { bodyParser: false } };
 
@@ -13,9 +14,65 @@ const TIER_ROLES = {
 
 const TIER_NAMES = { spark: "Spark", flame: "Flame", blaze: "Blaze", inferno: "Inferno" };
 
+const TIER_PERKS = {
+  spark: ["Spark Discord-rolle", "Hjælp til at holde serveren kørende", "Prioriteret kø", "1x custom nummerplade"],
+  flame: [
+    "Flame Discord-rolle",
+    "Hjælp til at holde serveren kørende",
+    "Prioriteret kø+",
+    "Adgang til beta-features",
+    "2x custom nummerplade",
+    "Alle Spark fordele",
+  ],
+  blaze: [
+    "Blaze Discord-rolle",
+    "Hjælp til at holde serveren kørende",
+    "Prioriteret kø++",
+    "Adgang til beta-features",
+    "3x custom nummerplade",
+    "Ændring af nummerplade (1x pr. måned)",
+    "Alle Flame fordele",
+  ],
+  inferno: [
+    "Inferno Discord-rolle",
+    "Hjælp til at holde serveren kørende",
+    "Højeste kø-prioritet",
+    "Adgang til beta-features",
+    "5x custom nummerplade",
+    "Ændring af nummerplade (fair use)",
+    "Prioritet i whitelist/ansøgninger",
+    "Alle Blaze fordele",
+  ],
+  custom: ["Anerkendelse for din støtte til serveren"],
+};
+
 const AMOUNT_TIER = { 2900: "spark", 5900: "flame", 9900: "blaze", 14900: "inferno" };
 
 const DONATION_ANNOUNCE_CHANNEL_ID = "1531015872938774659";
+
+function generateReceiptCode() {
+  return "EVX-" + crypto.randomBytes(5).toString("hex").toUpperCase();
+}
+
+async function createDonationCode(supabase, { discordId, tier, amountKr, frequency, stripeSessionId }) {
+  const code = generateReceiptCode();
+  const { error } = await supabase.from("donation_codes").insert({
+    code,
+    discord_id: discordId,
+    tier,
+    amount_kr: amountKr,
+    frequency,
+    stripe_session_id: stripeSessionId || null,
+    status: "unused",
+  });
+  if (error) throw error;
+
+  const perks = TIER_PERKS[tier] || [];
+  if (perks.length) {
+    await supabase.from("donation_code_perks").insert(perks.map((label) => ({ code, label })));
+  }
+  return code;
+}
 
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
@@ -58,6 +115,8 @@ export default async function handler(req, res) {
     return;
   }
 
+  const supabase = getSupabase();
+
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
     const discordId = session.client_reference_id;
@@ -79,6 +138,84 @@ export default async function handler(req, res) {
         await sendChannelMessage(DONATION_ANNOUNCE_CHANNEL_ID, message);
       } catch {
         // Announcement failing shouldn't fail the webhook ack.
+      }
+
+      try {
+        await createDonationCode(supabase, {
+          discordId,
+          tier,
+          amountKr: Math.round(session.amount_total / 100),
+          frequency: session.mode === "subscription" ? "month" : "once",
+          stripeSessionId: session.id,
+        });
+      } catch {
+        // If this fails, the donor won't get a receipt code shown - not fatal to the webhook ack.
+      }
+
+      if (session.mode === "subscription" && session.subscription) {
+        try {
+          await supabase
+            .from("subscriptions")
+            .upsert({ stripe_subscription_id: session.subscription, discord_id: discordId, tier });
+        } catch {
+          // If this fails, renewal invoices for this subscription won't be traceable back to the user.
+        }
+      }
+    }
+  }
+
+  if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object;
+    if (invoice.billing_reason === "subscription_cycle" && invoice.subscription) {
+      const { data: sub } = await supabase
+        .from("subscriptions")
+        .select("discord_id, tier")
+        .eq("stripe_subscription_id", invoice.subscription)
+        .maybeSingle();
+
+      if (sub) {
+        const roleId = TIER_ROLES[sub.tier];
+        if (roleId) {
+          try {
+            await addRoleToUser(sub.discord_id, roleId);
+          } catch {
+            // Best-effort re-affirmation of the role on renewal.
+          }
+        }
+
+        let newCode = null;
+        try {
+          newCode = await createDonationCode(supabase, {
+            discordId: sub.discord_id,
+            tier: sub.tier,
+            amountKr: Math.round(invoice.amount_paid / 100),
+            frequency: "month",
+            stripeSessionId: null,
+          });
+        } catch {
+          // If this fails, the renewal won't get a fresh code.
+        }
+
+        try {
+          const tierLabel = TIER_NAMES[sub.tier] || sub.tier;
+          await sendChannelMessage(
+            DONATION_ANNOUNCE_CHANNEL_ID,
+            `Tusind tak til <@${sub.discord_id}> for at forny sin **${tierLabel}** donation endnu en måned!`
+          );
+        } catch {
+          // Not fatal.
+        }
+
+        if (newCode) {
+          try {
+            await sendDiscordDM(
+              sub.discord_id,
+              `Din donation er blevet fornyet for en ny måned! Din nye kvitteringskode til at indløse dine fordele på Discord er: **${newCode}**\n\nOpret en Donation-ticket og indtast koden for at få dine fordele.`
+            );
+          } catch {
+            // DMs can fail if the user has them closed.
+          }
+        }
       }
     }
   }

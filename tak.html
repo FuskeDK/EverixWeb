@@ -60,6 +60,12 @@
   <section class="section">
     <div class="wrap">
       <div class="apply-wrap">
+        <div class="form-panel" id="takCodePanel" hidden>
+          <p class="form-panel-label">Din kvitteringskode</p>
+          <p class="mono" id="takCode" style="font-size: 28px; font-weight: 700; color: var(--orange); letter-spacing: .04em; margin-bottom: 10px;"></p>
+          <p style="color: var(--gray); font-size: 14px; line-height: 1.6;">Gem denne kode - du skal bruge den, når du opretter en Donation-ticket på Discord for at få dine fordele.</p>
+        </div>
+
         <div class="form-panel" id="takPerksPanel" hidden>
           <p class="form-panel-label" id="takTierLabel">Dine fordele</p>
           <ul class="donation-perks" id="takPerksList"></ul>
@@ -68,8 +74,8 @@
         <div class="admin-card" style="margin-top: 24px; padding: 28px 32px;">
           <h3 style="margin-bottom: 12px;">Sådan får du dine fordele</h3>
           <p style="color: var(--gray); font-size: 15px; line-height: 1.7; margin-bottom: 22px;">
-            Dine fordele bliver ikke givet automatisk. Opret en ticket på vores Discord-server og vis din kvittering fra Stripe,
-            så sørger staff for at give dig det, du har betalt for.
+            Dine fordele bliver ikke givet automatisk. Opret en Donation-ticket på vores Discord-server og indtast din
+            kvitteringskode, så sørger staff for at give dig det, du har betalt for.
           </p>
           <a href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener" class="btn btn-primary btn-large">Åbn en ticket på Discord</a>
         </div>

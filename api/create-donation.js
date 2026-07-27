@@ -1,10 +1,31 @@
 import { getUserSession } from "../lib/session.js";
+import { getSupabase } from "../lib/supabase.js";
 
 const MIN_KR = 10;
 const MAX_KR = 10000;
 const PRODUCT_ID = "prod_Uxp4hNmefznZEB";
 
 export default async function handler(req, res) {
+  if (req.method === "GET") {
+    const { session_id } = req.query;
+    if (!session_id) {
+      res.status(400).json({ error: "missing_session_id" });
+      return;
+    }
+    const supabase = getSupabase();
+    const { data } = await supabase
+      .from("donation_codes")
+      .select("code, tier, amount_kr, frequency")
+      .eq("stripe_session_id", session_id)
+      .maybeSingle();
+    if (!data) {
+      res.status(404).json({ error: "not_found" });
+      return;
+    }
+    res.status(200).json(data);
+    return;
+  }
+
   if (req.method !== "POST") {
     res.status(405).json({ error: "method_not_allowed" });
     return;
@@ -30,7 +51,7 @@ export default async function handler(req, res) {
 
   const params = new URLSearchParams({
     mode: frequency === "month" ? "subscription" : "payment",
-    success_url: "https://everix-chi.vercel.app/tak?tier=custom",
+    success_url: "https://everix-chi.vercel.app/tak?tier=custom&session_id={CHECKOUT_SESSION_ID}",
     cancel_url: "https://everix-chi.vercel.app/donation",
     "line_items[0][price_data][currency]": "dkk",
     "line_items[0][price_data][unit_amount]": String(kr * 100),
