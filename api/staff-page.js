@@ -37,6 +37,7 @@ function renderPage(category) {
 <header class="site-header" id="site-header">
   <div class="wrap header-inner">
     <a href="/" class="brand">
+      <img src="/logo.png" alt="Everix" class="brand-mark">
       <span class="brand-name">Everix</span>
     </a>
     <nav class="main-nav" aria-label="Hovednavigation">
