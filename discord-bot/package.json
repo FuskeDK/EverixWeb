@@ -1,0 +1,13 @@
+{
+  "name": "everix-presence-bot",
+  "version": "1.0.0",
+  "description": "Keeps the Everix Discord bot showing online. Does not handle commands - the website's serverless functions handle everything else via the same bot token.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3"
+  }
+}
