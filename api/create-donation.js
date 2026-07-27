@@ -37,6 +37,7 @@ export default async function handler(req, res) {
     "line_items[0][price_data][product]": PRODUCT_ID,
     "line_items[0][quantity]": "1",
     "client_reference_id": session.discordId,
+    "metadata[tier]": "custom",
   });
   if (frequency === "month") {
     params.set("line_items[0][price_data][recurring][interval]", "month");

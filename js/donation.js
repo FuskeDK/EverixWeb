@@ -22,7 +22,8 @@
             window.location.href = "/api/discord-callback?return=" + encodeURIComponent("/donation");
             return;
           }
-          window.open(stripeUrl, "_blank", "noopener");
+          var urlWithRef = stripeUrl + "?client_reference_id=" + encodeURIComponent(data.discordId);
+          window.open(urlWithRef, "_blank", "noopener");
         })
         .catch(function () {
           window.location.href = "/api/discord-callback?return=" + encodeURIComponent("/donation");

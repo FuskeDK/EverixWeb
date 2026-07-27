@@ -91,7 +91,7 @@ function renderPage(category) {
     <div class="wrap">
       <div class="apply-user-bar">
         <span>Logget ind</span>
-        <a href="/api/logout">Log ud</a>
+        <a href="/api/me?logout=1&amp;return=/${category.toLowerCase()}">Log ud</a>
       </div>
 
       <div class="staff-toggle-row">
