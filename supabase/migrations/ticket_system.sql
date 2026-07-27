@@ -17,12 +17,25 @@ create table if not exists donation_code_perks (
   id uuid primary key default gen_random_uuid(),
   code text not null references donation_codes(code) on delete cascade,
   label text not null,
+  perk_type text not null default 'generic', -- 'generic' | 'plate' | 'phone'
   claimed boolean not null default false,
   claimed_at timestamptz,
   claimed_by text
 );
 
 create index if not exists donation_code_perks_by_code on donation_code_perks (code);
+
+-- Tracks every custom plate/phone number ever issued through the perk system,
+-- so a new request for the same plate/number can be rejected as already in use.
+create table if not exists custom_identifiers (
+  id uuid primary key default gen_random_uuid(),
+  kind text not null, -- 'plate' | 'phone'
+  value text not null,
+  perk_id uuid references donation_code_perks(id),
+  discord_id text not null,
+  created_at timestamptz not null default now(),
+  unique (kind, value)
+);
 
 -- Maps an active subscription back to the Discord user/tier, so monthly renewal
 -- payments (which don't go through checkout.session.completed) can still be

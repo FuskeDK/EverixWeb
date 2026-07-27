@@ -14,36 +14,32 @@ const TIER_ROLES = {
 
 const TIER_NAMES = { spark: "Spark", flame: "Flame", blaze: "Blaze", inferno: "Inferno" };
 
+// perk_type: 'generic' = simple staff checkbox. 'plate'/'phone' = needs the
+// vehicle/phone lookup flow in the bot, one checklist row per `count`.
 const TIER_PERKS = {
-  spark: ["Spark Discord-rolle", "Hjælp til at holde serveren kørende", "Prioriteret kø", "1x custom nummerplade"],
+  spark: [
+    { label: "Spark Discord-rolle", type: "generic" },
+    { label: "Prioriteret kø", type: "generic" },
+    { label: "Custom nummerplade", type: "plate", count: 1 },
+  ],
   flame: [
-    "Flame Discord-rolle",
-    "Hjælp til at holde serveren kørende",
-    "Prioriteret kø+",
-    "Adgang til beta-features",
-    "2x custom nummerplade",
-    "Alle Spark fordele",
+    { label: "Flame Discord-rolle", type: "generic" },
+    { label: "Prioriteret kø+", type: "generic" },
+    { label: "Custom nummerplade", type: "plate", count: 2 },
+    { label: "Alle Spark fordele", type: "generic" },
   ],
   blaze: [
-    "Blaze Discord-rolle",
-    "Hjælp til at holde serveren kørende",
-    "Prioriteret kø++",
-    "Adgang til beta-features",
-    "3x custom nummerplade",
-    "Ændring af nummerplade (1x pr. måned)",
-    "Alle Flame fordele",
+    { label: "Blaze Discord-rolle", type: "generic" },
+    { label: "Prioriteret kø++", type: "generic" },
+    { label: "Custom nummerplade", type: "plate", count: 3 },
+    { label: "Custom telefonnummer", type: "phone", count: 1 },
+    { label: "Alle Flame fordele", type: "generic" },
   ],
   inferno: [
-    "Inferno Discord-rolle",
-    "Hjælp til at holde serveren kørende",
-    "Højeste kø-prioritet",
-    "Adgang til beta-features",
-    "5x custom nummerplade",
-    "Ændring af nummerplade (fair use)",
-    "Prioritet i whitelist/ansøgninger",
-    "Alle Blaze fordele",
+    { label: "Custom nummerplade", type: "plate", count: 5 },
+    { label: "Custom telefonnummer", type: "phone", count: 1 },
   ],
-  custom: ["Anerkendelse for din støtte til serveren"],
+  custom: [{ label: "Anerkendelse for din støtte til serveren", type: "generic" }],
 };
 
 const AMOUNT_TIER = { 2900: "spark", 5900: "flame", 9900: "blaze", 14900: "inferno" };
@@ -68,8 +64,14 @@ async function createDonationCode(supabase, { discordId, tier, amountKr, frequen
   if (error) throw error;
 
   const perks = TIER_PERKS[tier] || [];
-  if (perks.length) {
-    await supabase.from("donation_code_perks").insert(perks.map((label) => ({ code, label })));
+  const perkRows = [];
+  perks.forEach((p) => {
+    for (let i = 0; i < (p.count || 1); i++) {
+      perkRows.push({ code, label: p.label, perk_type: p.type });
+    }
+  });
+  if (perkRows.length) {
+    await supabase.from("donation_code_perks").insert(perkRows);
   }
   return code;
 }

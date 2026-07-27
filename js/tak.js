@@ -4,13 +4,12 @@
   var TIERS = {
     spark: {
       name: "Spark",
-      perks: ["Spark Discord-rolle", "Hjælp til at holde serveren kørende", "Prioriteret kø", "1x custom nummerplade"],
+      perks: ["Spark Discord-rolle", "Prioriteret kø", "1x custom nummerplade"],
     },
     flame: {
       name: "Flame",
       perks: [
         "Flame Discord-rolle",
-        "Hjælp til at holde serveren kørende",
         "Prioriteret kø+",
         "Adgang til beta-features",
         "2x custom nummerplade",
@@ -21,11 +20,10 @@
       name: "Blaze",
       perks: [
         "Blaze Discord-rolle",
-        "Hjælp til at holde serveren kørende",
         "Prioriteret kø++",
         "Adgang til beta-features",
         "3x custom nummerplade",
-        "Ændring af nummerplade (1x pr. måned)",
+        "Custom telefonnummer",
         "Alle Flame fordele",
       ],
     },
@@ -33,11 +31,10 @@
       name: "Inferno",
       perks: [
         "Inferno Discord-rolle",
-        "Hjælp til at holde serveren kørende",
         "Højeste kø-prioritet",
         "Adgang til beta-features",
         "5x custom nummerplade",
-        "Ændring af nummerplade (fair use)",
+        "Custom telefonnummer",
         "Prioritet i whitelist/ansøgninger",
         "Alle Blaze fordele",
       ],
