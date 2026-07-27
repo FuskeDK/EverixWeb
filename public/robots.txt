@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /admin
+Disallow: /politi
+Disallow: /ems
+Disallow: /firma
+Disallow: /bande
+Disallow: /whitelist
+Disallow: /tak
+
+Sitemap: https://everix-chi.vercel.app/sitemap.xml
