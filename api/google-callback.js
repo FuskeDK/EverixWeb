@@ -1,6 +1,6 @@
 import { createOAuthState, verifyOAuthState, createAdminSession, isAllowedAdminEmail } from "../lib/session.js";
 
-const REDIRECT_URI = "https://everix-chi.vercel.app/api/google-callback";
+const REDIRECT_URI = "https://everixrp.vercel.app/api/google-callback";
 
 export default async function handler(req, res) {
   const { code, state } = req.query;

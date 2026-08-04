@@ -42,7 +42,7 @@ const commands = [
 client.once("ready", async () => {
   client.user.setPresence({
     status: "online",
-    activities: [{ name: "everix-chi.vercel.app", type: ActivityType.Watching }],
+    activities: [{ name: "everixrp.vercel.app", type: ActivityType.Watching }],
   });
   console.log(`Logged in as ${client.user.tag}`);
 

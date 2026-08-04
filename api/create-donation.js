@@ -51,8 +51,8 @@ export default async function handler(req, res) {
 
   const params = new URLSearchParams({
     mode: frequency === "month" ? "subscription" : "payment",
-    success_url: "https://everix-chi.vercel.app/tak?tier=custom&session_id={CHECKOUT_SESSION_ID}",
-    cancel_url: "https://everix-chi.vercel.app/donation",
+    success_url: "https://everixrp.vercel.app/tak?tier=custom&session_id={CHECKOUT_SESSION_ID}",
+    cancel_url: "https://everixrp.vercel.app/donation",
     "line_items[0][price_data][currency]": "dkk",
     "line_items[0][price_data][unit_amount]": String(kr * 100),
     "line_items[0][price_data][product]": PRODUCT_ID,

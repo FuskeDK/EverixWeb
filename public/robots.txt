@@ -7,4 +7,4 @@ Disallow: /bande
 Disallow: /whitelist
 Disallow: /tak
 
-Sitemap: https://everix-chi.vercel.app/sitemap.xml
+Sitemap: https://everixrp.vercel.app/sitemap.xml
