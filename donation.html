@@ -67,6 +67,26 @@
 
       <div class="donation-grid">
 
+        <article class="donation-card donation-card-custom">
+          <div class="donation-card-top">
+            <span class="donation-icon donation-icon-custom">?</span>
+            <p class="donation-price">Frit<span>engangsbeløb</span></p>
+          </div>
+          <h3>Vælg selv</h3>
+          <div class="amount-chip-row" id="amountChipRow">
+            <button type="button" class="amount-chip" data-amount="25">25 kr.</button>
+            <button type="button" class="amount-chip" data-amount="50">50 kr.</button>
+            <button type="button" class="amount-chip" data-amount="100">100 kr.</button>
+            <button type="button" class="amount-chip" data-amount="250">250 kr.</button>
+          </div>
+          <label class="field field-compact donation-custom-field">
+            <span>Beløb (kr.)</span>
+            <input type="number" id="customAmount" min="10" max="10000" step="1" placeholder="50">
+          </label>
+          <p class="form-hint" id="customDonateHint">Mellem 10 kr. og 10.000 kr. · engangsbetaling</p>
+          <button type="button" id="customDonateBtn" class="btn btn-outline btn-large">Donér nu</button>
+        </article>
+
         <article class="donation-card donation-card-spark">
           <div class="donation-card-top">
             <span class="donation-icon donation-icon-spark">S</span>
@@ -185,43 +205,6 @@
               <p>Giveaways, events og premier til aktive medlemmer af community'et.</p>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section donation-custom-section">
-    <div class="wrap">
-      <div class="custom-donation-layout">
-        <div class="custom-donation-text">
-          <p class="eyebrow">Andet beløb</p>
-          <h2 class="section-title">Eller støt med dit eget beløb</h2>
-          <p class="custom-donation-lede">Ikke interesseret i et fast niveau? Vælg selv et beløb - engangs eller månedligt - og støt serveren uden at binde dig til en bestemt pakke.</p>
-        </div>
-
-        <div class="form-panel custom-donation-panel">
-          <p class="form-panel-label">Vælg selv beløb</p>
-          <div class="amount-chip-row" id="amountChipRow">
-            <button type="button" class="amount-chip" data-amount="25">25 kr.</button>
-            <button type="button" class="amount-chip" data-amount="50">50 kr.</button>
-            <button type="button" class="amount-chip" data-amount="100">100 kr.</button>
-            <button type="button" class="amount-chip" data-amount="250">250 kr.</button>
-          </div>
-          <div class="form-panel-grid">
-            <label class="field field-compact">
-              <span>Beløb (kr.)</span>
-              <input type="number" id="customAmount" min="10" max="10000" step="1" placeholder="50">
-            </label>
-            <label class="field field-compact">
-              <span>Hyppighed</span>
-              <select id="customFrequency">
-                <option value="month">Hver måned</option>
-                <option value="once">Engangsbetaling</option>
-              </select>
-            </label>
-          </div>
-          <button type="button" id="customDonateBtn" class="btn btn-primary">Donér valgfrit beløb</button>
-          <p class="form-hint" id="customDonateHint">Mellem 10 kr. og 10.000 kr.</p>
         </div>
       </div>
     </div>
