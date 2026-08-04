@@ -355,7 +355,7 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
   if (donationSearch) donationSearch.addEventListener("input", renderDonationList);
 
   function loadDonations() {
-    return fetch("/api/admin/donations", { credentials: "include" })
+    return fetch("/api/admin/applications?resource=donations", { credentials: "include" })
       .then(function (r) { return r.json(); })
       .then(function (data) {
         allDonations = data.donations || [];
