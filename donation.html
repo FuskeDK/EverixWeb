@@ -67,26 +67,28 @@
 
       <div class="donation-grid">
 
-        <article class="donation-card">
-          <span class="donation-icon donation-icon-spark">S</span>
+        <article class="donation-card donation-card-spark">
+          <div class="donation-card-top">
+            <span class="donation-icon donation-icon-spark">S</span>
+            <p class="donation-price">29<span>kr./md.</span></p>
+          </div>
           <h3>Spark</h3>
-          <p class="donation-price">29 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
             <li>Spark Discord-rolle</li>
-
             <li>Prioriteret kø</li>
             <li>1x custom nummerplade</li>
           </ul>
           <a href="#" data-tier="spark" class="btn btn-outline btn-large donate-btn">Donér nu</a>
         </article>
 
-        <article class="donation-card">
-          <span class="donation-icon donation-icon-flame">F</span>
+        <article class="donation-card donation-card-flame">
+          <div class="donation-card-top">
+            <span class="donation-icon donation-icon-flame">F</span>
+            <p class="donation-price">59<span>kr./md.</span></p>
+          </div>
           <h3>Flame</h3>
-          <p class="donation-price">59 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
             <li>Flame Discord-rolle</li>
-
             <li>Prioriteret kø+</li>
             <li>Adgang til beta-features</li>
             <li>2x custom nummerplade</li>
@@ -95,14 +97,15 @@
           <a href="#" data-tier="flame" class="btn btn-outline btn-large donate-btn">Donér nu</a>
         </article>
 
-        <article class="donation-card donation-card-popular">
+        <article class="donation-card donation-card-blaze donation-card-popular">
           <span class="donation-badge">Mest populær</span>
-          <span class="donation-icon donation-icon-blaze">B</span>
+          <div class="donation-card-top">
+            <span class="donation-icon donation-icon-blaze">B</span>
+            <p class="donation-price">99<span>kr./md.</span></p>
+          </div>
           <h3>Blaze</h3>
-          <p class="donation-price">99 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
             <li>Blaze Discord-rolle</li>
-
             <li>Prioriteret kø++</li>
             <li>Adgang til beta-features</li>
             <li>3x custom nummerplade</li>
@@ -112,13 +115,14 @@
           <a href="#" data-tier="blaze" class="btn btn-primary btn-large donate-btn">Donér nu</a>
         </article>
 
-        <article class="donation-card">
-          <span class="donation-icon donation-icon-inferno">I</span>
+        <article class="donation-card donation-card-inferno">
+          <div class="donation-card-top">
+            <span class="donation-icon donation-icon-inferno">I</span>
+            <p class="donation-price">149<span>kr./md.</span></p>
+          </div>
           <h3>Inferno</h3>
-          <p class="donation-price">149 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
             <li>Inferno Discord-rolle</li>
-
             <li>Højeste kø-prioritet</li>
             <li>Adgang til beta-features</li>
             <li>5x custom nummerplade</li>
@@ -139,30 +143,48 @@
     <div class="wrap">
       <p class="eyebrow">Gennemsigtighed</p>
       <h2 class="section-title">Hvor pengene går hen</h2>
-      <div class="impact-panel">
-        <div class="impact-row">
-          <div class="impact-row-head">
-            <span>Server &amp; drift</span>
-            <span class="impact-percent">55%</span>
+      <div class="impact-layout">
+        <p class="impact-intro">Vi driver Everix åbent. Her er den korte version af, hvad dine donationer faktisk bruges på hver måned - ingen skjulte poster.</p>
+        <div class="impact-panel">
+          <div class="impact-row">
+            <span class="impact-icon impact-icon-orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><circle cx="7" cy="7.5" r="1"/><circle cx="7" cy="16.5" r="1"/></svg>
+            </span>
+            <div class="impact-body">
+              <div class="impact-row-head">
+                <span>Server &amp; drift</span>
+                <span class="impact-percent">55%</span>
+              </div>
+              <div class="impact-bar"><div class="impact-fill impact-fill-orange" style="width:55%"></div></div>
+              <p>Hosting, database og infrastruktur, så serveren kører stabilt døgnet rundt.</p>
+            </div>
           </div>
-          <div class="impact-bar"><div class="impact-fill impact-fill-orange" style="width:55%"></div></div>
-          <p>Hosting, database og infrastruktur, så serveren kører stabilt døgnet rundt.</p>
-        </div>
-        <div class="impact-row">
-          <div class="impact-row-head">
-            <span>Udvikling</span>
-            <span class="impact-percent">30%</span>
+          <div class="impact-row">
+            <span class="impact-icon impact-icon-blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 5 3 12l5 7"/><path d="M16 5l5 7-5 7"/></svg>
+            </span>
+            <div class="impact-body">
+              <div class="impact-row-head">
+                <span>Udvikling</span>
+                <span class="impact-percent">30%</span>
+              </div>
+              <div class="impact-bar"><div class="impact-fill impact-fill-blue" style="width:30%"></div></div>
+              <p>Nye scripts, kort og features bygget af vores udviklerteam.</p>
+            </div>
           </div>
-          <div class="impact-bar"><div class="impact-fill impact-fill-blue" style="width:30%"></div></div>
-          <p>Nye scripts, kort og features bygget af vores udviklerteam.</p>
-        </div>
-        <div class="impact-row">
-          <div class="impact-row-head">
-            <span>Events &amp; community</span>
-            <span class="impact-percent">15%</span>
+          <div class="impact-row">
+            <span class="impact-icon impact-icon-amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.9 4.9 2.8 2.8"/><path d="m16.3 16.3 2.8 2.8"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.9 19.1 2.8-2.8"/><path d="m16.3 7.7 2.8-2.8"/></svg>
+            </span>
+            <div class="impact-body">
+              <div class="impact-row-head">
+                <span>Events &amp; community</span>
+                <span class="impact-percent">15%</span>
+              </div>
+              <div class="impact-bar"><div class="impact-fill impact-fill-amber" style="width:15%"></div></div>
+              <p>Giveaways, events og premier til aktive medlemmer af community'et.</p>
+            </div>
           </div>
-          <div class="impact-bar"><div class="impact-fill impact-fill-amber" style="width:15%"></div></div>
-          <p>Giveaways, events og premier til aktive medlemmer af community'et.</p>
         </div>
       </div>
     </div>
@@ -170,32 +192,37 @@
 
   <section class="section donation-custom-section">
     <div class="wrap">
-      <p class="eyebrow">Andet beløb</p>
-      <h2 class="section-title">Eller støt med dit eget beløb</h2>
+      <div class="custom-donation-layout">
+        <div class="custom-donation-text">
+          <p class="eyebrow">Andet beløb</p>
+          <h2 class="section-title">Eller støt med dit eget beløb</h2>
+          <p class="custom-donation-lede">Ikke interesseret i et fast niveau? Vælg selv et beløb - engangs eller månedligt - og støt serveren uden at binde dig til en bestemt pakke.</p>
+        </div>
 
-      <div class="form-panel custom-donation-panel">
-        <p class="form-panel-label">Vælg selv beløb</p>
-        <div class="amount-chip-row" id="amountChipRow">
-          <button type="button" class="amount-chip" data-amount="25">25 kr.</button>
-          <button type="button" class="amount-chip" data-amount="50">50 kr.</button>
-          <button type="button" class="amount-chip" data-amount="100">100 kr.</button>
-          <button type="button" class="amount-chip" data-amount="250">250 kr.</button>
+        <div class="form-panel custom-donation-panel">
+          <p class="form-panel-label">Vælg selv beløb</p>
+          <div class="amount-chip-row" id="amountChipRow">
+            <button type="button" class="amount-chip" data-amount="25">25 kr.</button>
+            <button type="button" class="amount-chip" data-amount="50">50 kr.</button>
+            <button type="button" class="amount-chip" data-amount="100">100 kr.</button>
+            <button type="button" class="amount-chip" data-amount="250">250 kr.</button>
+          </div>
+          <div class="form-panel-grid">
+            <label class="field field-compact">
+              <span>Beløb (kr.)</span>
+              <input type="number" id="customAmount" min="10" max="10000" step="1" placeholder="50">
+            </label>
+            <label class="field field-compact">
+              <span>Hyppighed</span>
+              <select id="customFrequency">
+                <option value="month">Hver måned</option>
+                <option value="once">Engangsbetaling</option>
+              </select>
+            </label>
+          </div>
+          <button type="button" id="customDonateBtn" class="btn btn-primary">Donér valgfrit beløb</button>
+          <p class="form-hint" id="customDonateHint">Mellem 10 kr. og 10.000 kr.</p>
         </div>
-        <div class="form-panel-grid">
-          <label class="field field-compact">
-            <span>Beløb (kr.)</span>
-            <input type="number" id="customAmount" min="10" max="10000" step="1" placeholder="50">
-          </label>
-          <label class="field field-compact">
-            <span>Hyppighed</span>
-            <select id="customFrequency">
-              <option value="month">Hver måned</option>
-              <option value="once">Engangsbetaling</option>
-            </select>
-          </label>
-        </div>
-        <button type="button" id="customDonateBtn" class="btn btn-primary">Donér valgfrit beløb</button>
-        <p class="form-hint" id="customDonateHint">Mellem 10 kr. og 10.000 kr.</p>
       </div>
     </div>
   </section>
