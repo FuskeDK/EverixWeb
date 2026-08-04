@@ -67,6 +67,11 @@
 
       <div class="admin-stat-row" id="applicationStats"></div>
 
+      <div class="admin-toolbar">
+        <button type="button" class="btn btn-outline btn-small" id="refreshApplicationsBtn">Opdatér</button>
+        <button type="button" class="btn btn-outline btn-small" id="exportApplicationsBtn">Eksportér CSV</button>
+      </div>
+
       <div class="admin-filters" id="adminFilters">
         <button type="button" class="admin-filter-btn is-active" data-filter="Alle">Alle</button>
         <button type="button" class="admin-filter-btn" data-filter="Whitelist">Whitelist</button>
@@ -95,6 +100,12 @@
   <section class="section" id="adminTabDonationer" hidden>
     <div class="wrap">
       <div class="admin-stat-row" id="donationStats"></div>
+      <div class="admin-tier-breakdown" id="donationTierBreakdown"></div>
+
+      <div class="admin-toolbar">
+        <button type="button" class="btn btn-outline btn-small" id="refreshDonationsBtn">Opdatér</button>
+        <button type="button" class="btn btn-outline btn-small" id="exportDonationsBtn">Eksportér CSV</button>
+      </div>
 
       <input type="text" id="donationSearch" class="staff-search" placeholder="Søg efter Discord-ID, kode eller niveau...">
       <div id="donationList" class="admin-list"></div>

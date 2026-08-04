@@ -87,6 +87,27 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
   var activeCategoryFilter = "Alle";
   var applicationStats = document.getElementById("applicationStats");
 
+  function downloadCsv(filename, rows) {
+    if (!rows.length) return;
+    var headers = Object.keys(rows[0]);
+    var escapeCell = function (val) {
+      var str = val === null || val === undefined ? "" : String(val);
+      return '"' + str.replace(/"/g, '""') + '"';
+    };
+    var lines = [headers.map(escapeCell).join(",")].concat(
+      rows.map(function (row) { return headers.map(function (h) { return escapeCell(row[h]); }).join(","); })
+    );
+    var blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   function renderStatRow(el, items) {
     if (!el) return;
     el.innerHTML = items
@@ -143,6 +164,32 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
       { label: "Afvist", value: allApplications.filter(function (a) { return a.status === "rejected"; }).length },
       { label: "I alt", value: allApplications.length },
     ]);
+  }
+
+  var refreshApplicationsBtn = document.getElementById("refreshApplicationsBtn");
+  var exportApplicationsBtn = document.getElementById("exportApplicationsBtn");
+
+  if (refreshApplicationsBtn) {
+    refreshApplicationsBtn.addEventListener("click", function () {
+      refreshApplicationsBtn.disabled = true;
+      loadApplications().finally(function () { refreshApplicationsBtn.disabled = false; });
+    });
+  }
+
+  if (exportApplicationsBtn) {
+    exportApplicationsBtn.addEventListener("click", function () {
+      downloadCsv(
+        "ansogninger.csv",
+        allApplications.map(function (a) {
+          return {
+            discord_username: a.discord_username,
+            category: a.category,
+            status: a.status,
+            created_at: a.created_at,
+          };
+        })
+      );
+    });
   }
 
   function loadApplications() {
@@ -343,16 +390,75 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
           '<div class="admin-card-body">' +
           '<div class="admin-answers">' +
           '<div class="admin-answer-row"><span class="admin-answer-key">Discord-ID</span><span class="admin-answer-value">' + escapeHtml(d.discord_id) + "</span></div>" +
-          '<div class="admin-answer-row"><span class="admin-answer-key">Kvitteringskode</span><span class="admin-answer-value">' + escapeHtml(d.code) + "</span></div>" +
+          '<div class="admin-answer-row"><span class="admin-answer-key">Kvitteringskode</span><span class="admin-answer-value">' + escapeHtml(d.code) +
+          ' <button type="button" class="btn btn-ghost btn-small" data-copy-code="' + escapeHtml(d.code) + '">Kopiér</button></span></div>' +
           "</div>" +
           "</div>" +
           "</div>"
         );
       })
       .join("") || '<p class="apply-gate-text">Ingen donationer matcher din søgning.</p>';
+
+    donationList.querySelectorAll("[data-copy-code]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var code = btn.getAttribute("data-copy-code");
+        navigator.clipboard.writeText(code).then(function () {
+          var original = btn.textContent;
+          btn.textContent = "Kopieret!";
+          setTimeout(function () { btn.textContent = original; }, 1500);
+        });
+      });
+    });
   }
 
   if (donationSearch) donationSearch.addEventListener("input", renderDonationList);
+
+  var donationTierBreakdown = document.getElementById("donationTierBreakdown");
+
+  function renderTierBreakdown(byTier) {
+    if (!donationTierBreakdown) return;
+    var tiers = Object.keys(byTier || {});
+    donationTierBreakdown.innerHTML = tiers.length
+      ? tiers
+          .map(function (tier) {
+            return (
+              '<span class="admin-tier-chip">' +
+              escapeHtml(TIER_LABELS[tier] || tier) +
+              " <strong>" + byTier[tier] + "</strong></span>"
+            );
+          })
+          .join("")
+      : "";
+  }
+
+  var refreshDonationsBtn = document.getElementById("refreshDonationsBtn");
+  var exportDonationsBtn = document.getElementById("exportDonationsBtn");
+
+  if (refreshDonationsBtn) {
+    refreshDonationsBtn.addEventListener("click", function () {
+      refreshDonationsBtn.disabled = true;
+      loadDonations().finally(function () { refreshDonationsBtn.disabled = false; });
+    });
+  }
+
+  if (exportDonationsBtn) {
+    exportDonationsBtn.addEventListener("click", function () {
+      downloadCsv(
+        "donationer.csv",
+        allDonations.map(function (d) {
+          return {
+            code: d.code,
+            discord_id: d.discord_id,
+            tier: TIER_LABELS[d.tier] || d.tier,
+            amount_kr: d.amount_kr,
+            frequency: d.frequency,
+            status: d.status,
+            created_at: d.created_at,
+          };
+        })
+      );
+    });
+  }
 
   function loadDonations() {
     return fetch("/api/admin/applications?resource=donations", { credentials: "include" })
@@ -366,6 +472,7 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
           { label: "Aktive abonnementer", value: stats.activeSubscriptions || 0 },
           { label: "Ikke-indløste koder", value: stats.unusedCodes || 0 },
         ]);
+        renderTierBreakdown(stats.byTier);
         renderDonationList();
       });
   }
