@@ -1,7 +1,8 @@
 import { getUserSession } from "../lib/session.js";
 import { getSupabase } from "../lib/supabase.js";
+import { CATEGORY_ROLES } from "../lib/roles.js";
 
-const VALID_CATEGORIES = ["Politi", "EMS", "Firma", "Bande"];
+const VALID_CATEGORIES = Object.keys(CATEGORY_ROLES);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -22,6 +23,18 @@ export default async function handler(req, res) {
   }
 
   const supabase = getSupabase();
+
+  const { data: setting } = await supabase
+    .from("category_settings")
+    .select("enabled")
+    .eq("category", category)
+    .single();
+
+  if (!setting || !setting.enabled) {
+    res.status(403).json({ error: "category_disabled" });
+    return;
+  }
+
   const { error } = await supabase.from("applications").insert({
     discord_id: session.discordId,
     discord_username: session.discordUsername,

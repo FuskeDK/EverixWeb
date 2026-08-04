@@ -1,26 +1,15 @@
-import { getAdminSession } from "../../../../lib/session.js";
+import { getUserSession, getAdminSession } from "../../../../lib/session.js";
 import { getSupabase } from "../../../../lib/supabase.js";
 import { sendDiscordDM, addDiscordRole } from "../../../../lib/discord.js";
+import { hasCategoryAccess } from "../../../../lib/roles.js";
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
+  if (req.method !== "POST" && req.method !== "DELETE") {
     res.status(405).json({ error: "method_not_allowed" });
     return;
   }
 
-  const admin = getAdminSession(req);
-  if (!admin) {
-    res.status(401).json({ error: "not_admin" });
-    return;
-  }
-
   const { id } = req.query;
-  const { action } = req.body || {};
-  if (action !== "approve" && action !== "reject") {
-    res.status(400).json({ error: "invalid_action" });
-    return;
-  }
-
   const supabase = getSupabase();
   const { data: application, error: fetchError } = await supabase
     .from("applications")
@@ -33,11 +22,50 @@ export default async function handler(req, res) {
     return;
   }
 
+  const allowed = await hasCategoryAccess(req, application.category);
+  if (!allowed) {
+    res.status(403).json({ error: "forbidden" });
+    return;
+  }
+
+  if (req.method === "DELETE") {
+    const { error: deleteError } = await supabase.from("applications").delete().eq("id", id);
+    if (deleteError) {
+      res.status(500).json({ error: "delete_failed" });
+      return;
+    }
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  const { action } = req.body || {};
+  if (action !== "approve" && action !== "reject" && action !== "reset") {
+    res.status(400).json({ error: "invalid_action" });
+    return;
+  }
+
+  if (action === "reset") {
+    const { error: resetError } = await supabase
+      .from("applications")
+      .update({ status: "pending", reviewed_at: null, reviewed_by: null })
+      .eq("id", id);
+    if (resetError) {
+      res.status(500).json({ error: "update_failed" });
+      return;
+    }
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  const admin = getAdminSession(req);
+  const user = getUserSession(req);
+  const reviewedBy = admin ? admin.email : user ? user.discordUsername : "unknown";
+
   const status = action === "approve" ? "approved" : "rejected";
 
   const { error: updateError } = await supabase
     .from("applications")
-    .update({ status, reviewed_at: new Date().toISOString(), reviewed_by: admin.email })
+    .update({ status, reviewed_at: new Date().toISOString(), reviewed_by: reviewedBy })
     .eq("id", id);
 
   if (updateError) {
@@ -56,7 +84,7 @@ export default async function handler(req, res) {
     // DM can fail if the user has DMs closed - don't block the decision on it.
   }
 
-  if (action === "approve") {
+  if (action === "approve" && application.category === "Whitelist") {
     try {
       await addDiscordRole(application.discord_id);
     } catch (err) {

@@ -1,0 +1,14 @@
+{
+  "name": "everix-presence-bot",
+  "version": "2.0.0",
+  "description": "Keeps the Everix Discord bot online, and runs the ticket system (categories, donation-code redemption, /claimeddonation). Role grants/DMs from applications and donations still happen separately via the website's serverless functions using the same bot token.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.16.3",
+    "@supabase/supabase-js": "^2.45.4"
+  }
+}

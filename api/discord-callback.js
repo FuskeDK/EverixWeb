@@ -1,18 +1,36 @@
-import { verifyOAuthState, createUserSession } from "../lib/session.js";
+import { createOAuthState, verifyOAuthState, createUserSession, setOAuthReturn, consumeOAuthReturn } from "../lib/session.js";
 import { exchangeDiscordCode, getDiscordUser } from "../lib/discord.js";
 
-export default async function handler(req, res) {
-  const { code, state } = req.query;
+const REDIRECT_URI = "https://everix-chi.vercel.app/api/discord-callback";
 
-  if (!code || !state || !verifyOAuthState(req, res, "discord", state)) {
-    res.writeHead(302, { Location: "/ansog?error=login_failed" });
+export default async function handler(req, res) {
+  const { code, state, return: returnPath } = req.query;
+
+  if (!code) {
+    const newState = createOAuthState(res, "discord");
+    if (returnPath) setOAuthReturn(res, "discord", returnPath);
+    const params = new URLSearchParams({
+      client_id: process.env.DISCORD_CLIENT_ID,
+      redirect_uri: REDIRECT_URI,
+      response_type: "code",
+      scope: "identify",
+      state: newState,
+    });
+    res.writeHead(302, { Location: `https://discord.com/api/oauth2/authorize?${params}` });
+    res.end();
+    return;
+  }
+
+  const destination = consumeOAuthReturn(req, res, "discord", "/ansog");
+
+  if (!state || !verifyOAuthState(req, res, "discord", state)) {
+    res.writeHead(302, { Location: `${destination}?error=login_failed` });
     res.end();
     return;
   }
 
   try {
-    const redirectUri = `https://${req.headers.host}/api/discord-callback`;
-    const tokens = await exchangeDiscordCode(code, redirectUri);
+    const tokens = await exchangeDiscordCode(code, REDIRECT_URI);
     const user = await getDiscordUser(tokens.access_token);
 
     createUserSession(res, {
@@ -20,10 +38,10 @@ export default async function handler(req, res) {
       discordUsername: user.username,
     });
 
-    res.writeHead(302, { Location: "/ansog" });
+    res.writeHead(302, { Location: destination });
     res.end();
   } catch (err) {
-    res.writeHead(302, { Location: "/ansog?error=login_failed" });
+    res.writeHead(302, { Location: `${destination}?error=login_failed` });
     res.end();
   }
 }

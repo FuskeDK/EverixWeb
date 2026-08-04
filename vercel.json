@@ -3,6 +3,15 @@
   "rewrites": [
     { "source": "/ansog", "destination": "/ansog.html" },
     { "source": "/regler", "destination": "/regler.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/politi", "destination": "/api/staff-page?category=Politi" },
+    { "source": "/ems", "destination": "/api/staff-page?category=EMS" },
+    { "source": "/firma", "destination": "/api/staff-page?category=Firma" },
+    { "source": "/bande", "destination": "/api/staff-page?category=Bande" },
+    { "source": "/whitelist", "destination": "/api/staff-page?category=Whitelist" },
+    { "source": "/donation", "destination": "/donation.html" },
+    { "source": "/tak", "destination": "/tak.html" },
+    { "source": "/privatlivspolitik", "destination": "/privatlivspolitik.html" },
+    { "source": "/servicevilkaar", "destination": "/servicevilkaar.html" }
   ]
 }

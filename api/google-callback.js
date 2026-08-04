@@ -1,15 +1,31 @@
-import { verifyOAuthState, createAdminSession } from "../lib/session.js";
+import { createOAuthState, verifyOAuthState, createAdminSession, isAllowedAdminEmail } from "../lib/session.js";
+
+const REDIRECT_URI = "https://everix-chi.vercel.app/api/google-callback";
 
 export default async function handler(req, res) {
   const { code, state } = req.query;
 
-  if (!code || !state || !verifyOAuthState(req, res, "google", state)) {
+  if (!code) {
+    const newState = createOAuthState(res, "google");
+    const params = new URLSearchParams({
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      redirect_uri: REDIRECT_URI,
+      response_type: "code",
+      scope: "openid email",
+      state: newState,
+      prompt: "select_account",
+    });
+    res.writeHead(302, { Location: `https://accounts.google.com/o/oauth2/v2/auth?${params}` });
+    res.end();
+    return;
+  }
+
+  if (!state || !verifyOAuthState(req, res, "google", state)) {
     res.status(401).send("Login mislykkedes. Gå tilbage og prøv igen.");
     return;
   }
 
   try {
-    const redirectUri = `https://${req.headers.host}/api/google-callback`;
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -18,7 +34,7 @@ export default async function handler(req, res) {
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
         grant_type: "authorization_code",
         code,
-        redirect_uri: redirectUri,
+        redirect_uri: REDIRECT_URI,
       }),
     });
     if (!tokenRes.ok) throw new Error("token exchange failed");
@@ -30,7 +46,7 @@ export default async function handler(req, res) {
     if (!userRes.ok) throw new Error("userinfo failed");
     const profile = await userRes.json();
 
-    if (!profile.email || profile.email !== process.env.ADMIN_EMAIL || !profile.email_verified) {
+    if (!profile.email_verified || !isAllowedAdminEmail(profile.email)) {
       res.status(403).send("Denne konto har ikke adgang til admin.");
       return;
     }

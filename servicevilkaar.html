@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Regler - Everix</title>
-<meta name="description" content="Reglerne for Everix. Læs dem grundigt før du ansøger, de bliver håndhævet konsekvent.">
+<title>Servicevilkår - Everix</title>
+<meta name="description" content="Servicevilkår for Everix - regler for brug af siden, ansøgninger og donationer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
     </a>
     <nav class="main-nav" aria-label="Hovednavigation">
       <a href="/">Hjem</a>
-      <a href="/regler" class="active">Regler</a>
+      <a href="/regler">Regler</a>
       <a href="/ansog">Ansøg</a>
       <a href="/donation">Donation</a>
     </nav>
@@ -50,26 +50,74 @@
 
   <section class="page-hero">
     <div class="wrap">
-      <p class="eyebrow">Regelsæt</p>
-      <h1 class="page-title">Reglerne for Everix</h1>
-      <p class="page-lede">Reglerne findes for at holde byen troværdig for alle, der spiller med. Læs dem grundigt før du ansøger. De bliver håndhævet ens, uanset hvem du er, eller hvor længe du har spillet.</p>
+      <p class="eyebrow">Juridisk</p>
+      <h1 class="page-title">Servicevilkår</h1>
+      <p class="page-lede">Senest opdateret 12. juli 2026. Ved at bruge everix-chi.vercel.app accepterer du disse vilkår.</p>
     </div>
   </section>
 
   <section class="section rules-section">
     <div class="wrap">
-      <div id="rulesContainer"></div>
-    </div>
-  </section>
 
-  <section class="section cta-section">
-    <div class="wrap cta-inner">
-      <h2>Klar til at ansøge</h2>
-      <p>Reglerne er en del af ansøgningen. Har du læst dem grundigt, er du klar til næste skridt.</p>
-      <div class="cta-actions">
-        <a href="/ansog" class="btn btn-primary btn-large">Ansøg nu</a>
-        <a href="https://discord.gg/nfb6urQQnG" class="btn btn-outline btn-large" target="_blank" rel="noopener">Discord</a>
+      <div class="rules-group">
+        <h2>Om siden</h2>
+        <p class="rules-note">
+          Denne side bruges til at ansøge om adgang til Everix, en dansk FiveM roleplay-server, samt til at støtte serveren
+          gennem donationer. Everix er ikke tilknyttet FiveM, Rockstar Games eller Discord.
+        </p>
       </div>
+
+      <div class="rules-group">
+        <h2>Ansøgninger</h2>
+        <p class="rules-note">
+          At sende en ansøgning er ingen garanti for godkendelse. Staff behandler ansøgninger efter eget skøn, og en afvisning
+          kan gives uden nærmere begrundelse. Forkerte eller vildledende oplysninger i en ansøgning kan medføre afvisning
+          eller udelukkelse. Reglerne for selve serveren findes på <a href="/regler" style="color: var(--orange); text-decoration: underline;">/regler</a> og er en del af disse vilkår.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Donationer</h2>
+        <p class="rules-note">
+          Donationer er månedlige, tilbagevendende betalinger håndteret af Stripe. Du kan opsige dit abonnement til enhver
+          tid via kvitteringen fra Stripe eller ved at kontakte staff. Fordele tildeles ikke automatisk - du skal selv
+          oprette en ticket på Discord med din kvittering for at få dem. Donationer er et frivilligt bidrag til driften af
+          serveren og giver ikke adgang til noget, der påvirker roleplay-balancen.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Adfærd og udelukkelse</h2>
+        <p class="rules-note">
+          Staff kan til enhver tid afvise en ansøgning, fjerne adgang eller udelukke en bruger fra serveren ved brud på
+          reglerne, uanset om brugeren har en aktiv donation. Der gives ikke automatisk refusion ved udelukkelse.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Ansvarsfraskrivelse</h2>
+        <p class="rules-note">
+          Siden stilles til rådighed, som den er. Vi garanterer ikke uafbrudt drift og er ikke ansvarlige for tab som følge
+          af nedetid, fejl i ansøgningssystemet eller tredjepartstjenester som Discord og Stripe.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Ændringer</h2>
+        <p class="rules-note">
+          Vi kan opdatere disse vilkår løbende. Væsentlige ændringer vil blive annonceret på vores Discord-server.
+          Fortsat brug af siden efter en ændring betragtes som accept af de nye vilkår.
+        </p>
+      </div>
+
+      <div class="rules-group">
+        <h2>Kontakt</h2>
+        <p class="rules-note">
+          Spørgsmål til disse vilkår kan stilles via en ticket på
+          <a href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener" style="color: var(--orange); text-decoration: underline;">Discord</a>.
+        </p>
+      </div>
+
     </div>
   </section>
 
@@ -112,7 +160,5 @@
 </footer>
 
 <script type="module" src="/js/main.js"></script>
-<script type="module" src="js/staff-nav.js"></script>
-<script type="module" src="js/regler.js"></script>
 </body>
 </html>

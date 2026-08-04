@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ansøg - Everix</title>
-<meta name="description" content="Ansøg om allowlist eller et whitelistet job på Everix.">
+<meta name="description" content="Ansøg om whitelist eller et whitelistet job på Everix.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="/logo.png">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
@@ -19,12 +19,14 @@
 <header class="site-header" id="site-header">
   <div class="wrap header-inner">
     <a href="/" class="brand">
+      <img src="/logo.png" alt="Everix" class="brand-mark">
       <span class="brand-name">Everix</span>
     </a>
     <nav class="main-nav" aria-label="Hovednavigation">
       <a href="/">Hjem</a>
       <a href="/regler">Regler</a>
       <a href="/ansog" class="active">Ansøg</a>
+    <a href="/donation">Donation</a>
     </nav>
     <div class="header-actions">
       <a class="btn-pill" href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener">Discord</a>
@@ -38,6 +40,7 @@
     <a href="/">Hjem</a>
     <a href="/regler">Regler</a>
     <a href="/ansog">Ansøg</a>
+    <a href="/donation">Donation</a>
     <a href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener">Discord</a>
     <a href="https://cfx.re/join/85jpg4" class="mobile-cta">Spil nu</a>
   </div>
@@ -49,17 +52,16 @@
     <div class="wrap">
       <p class="eyebrow">Ansøgninger</p>
       <h1 class="page-title">Ansøg til Everix</h1>
-      <p class="page-lede">Start med allowlist, det er din adgang til byen. Whitelistede jobs som politi, EMS, firma og bande kan du søge, når du er inde.</p>
+      <p class="page-lede">Whitelisten er nøglen ind i byen - det starter du med. Er du først inde, kan du søge de whitelistede roller: politi, EMS, firma eller bande.</p>
     </div>
   </section>
 
   <!-- LOGIN GATE (shown when not logged in with Discord) -->
   <section class="section apply-section" id="loginGate" hidden>
     <div class="wrap apply-wrap apply-gate">
-      <p class="eyebrow">Log ind for at ansøge</p>
       <h2 class="section-title">Du skal logge ind med Discord</h2>
       <p class="apply-gate-text">For at forhindre snyd og ansøgninger under falsk navn kræver alle ansøgninger login med Discord. Dit brugernavn hentes automatisk, når du er logget ind.</p>
-      <a href="/api/discord-login" class="btn btn-primary btn-large">Log ind med Discord</a>
+      <a href="/api/discord-callback" class="btn btn-primary btn-large">Log ind med Discord</a>
     </div>
   </section>
 
@@ -69,23 +71,25 @@
 
       <div class="apply-user-bar" id="applyUserBar">
         <span>Logget ind som <strong id="applyUsername"></strong></span>
-        <a href="/api/logout">Log ud</a>
+        <a href="/api/me?logout=1&amp;return=/ansog">Log ud</a>
       </div>
 
       <div class="apply-card-grid">
-        <div class="apply-card apply-card-disabled" aria-disabled="true" tabindex="-1">
-          <div class="apply-card-top" aria-hidden="true"></div>
-          <h3>Allowlist</h3>
-          <p>Dette er serverens grundlæggende ansøgning for at få adgang til Everix. Alle nye spillere skal igennem denne proces.</p>
-          <span class="apply-card-cta apply-card-cta-disabled">Du har allowlist</span>
-        </div>
+        <a href="#" class="apply-card" data-category="Whitelist">
+          <div class="apply-card-top">
+            <svg class="apply-card-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Whitelist</h3>
+          <p>Den grundlæggende ansøgning, der giver dig adgang til Everix. Alle nye medlemmer skal igennem den, uden undtagelse.</p>
+          <span class="apply-card-cta">Ansøg nu</span>
+        </a>
 
         <a href="#" class="apply-card" data-category="Politi">
           <div class="apply-card-top">
             <svg class="apply-card-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>Politi</h3>
-          <p>Oprethold lov og orden i gaderne, efterforsk sagerne ingen andre gider tage, og hold styr på byens kaos.</p>
+          <p>Hold styr på byens gader, tag sagerne op ingen andre gider, og sørg for at loven bliver håndhævet fair.</p>
           <span class="apply-card-cta">Ansøg nu</span>
         </a>
 
@@ -94,7 +98,7 @@
             <svg class="apply-card-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>EMS</h3>
-          <p>Red liv og hold byen kørende, når det går galt for andre. Ambulance, akutbehandling og de svære beslutninger under pres.</p>
+          <p>Ryk ud, når andre er i knibe. Akutbehandling, ambulancekørsel og beslutninger, der skal tages under pres.</p>
           <span class="apply-card-cta">Ansøg nu</span>
         </a>
 
@@ -103,7 +107,7 @@
             <svg class="apply-card-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>Firma</h3>
-          <p>Start eller driv en virksomhed i byen, fra værksted til restaurant. Byg din forretning op fra bunden og find din plads i økonomien.</p>
+          <p>Åbn og driv en forretning i byen, uanset om det er et værksted eller en restaurant. Byg det op fra bunden, og find din plads i byens økonomi.</p>
           <span class="apply-card-cta">Ansøg nu</span>
         </a>
 
@@ -112,7 +116,7 @@
             <svg class="apply-card-arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M6 4h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3>Bande</h3>
-          <p>Byg dit rygte i byens undergrund, sammen med resten af din crew. Loyalitet, territorium og konsekvenserne der følger med.</p>
+          <p>Skab et navn for din gruppe i byens underverden. Sammenhold, territorium og de konsekvenser, det fører med sig.</p>
           <span class="apply-card-cta">Ansøg nu</span>
         </a>
       </div>
@@ -129,7 +133,7 @@
         Tilbage til ansøgninger
       </button>
 
-      <p class="eyebrow">Ansøgning <span id="applyCategoryLabel">Allowlist</span></p>
+      <p class="eyebrow">Ansøgning <span id="applyCategoryLabel">Whitelist</span></p>
 
       <form class="apply-form" id="applyForm" novalidate>
 
@@ -162,13 +166,13 @@
             <h2>Din baggrund</h2>
 
             <label class="field">
-              <span>Har du prøvet roleplay før? Hvor i så fald</span>
-              <textarea name="erfaring" rows="3" placeholder="Skriv kort om din erfaring, eller at du er ny"></textarea>
+              <span>Har du roleplay-erfaring fra andre servere? I så fald hvilke</span>
+              <textarea name="erfaring" rows="3" placeholder="Skriv kort om din erfaring - eller skriv at du er helt ny"></textarea>
             </label>
 
             <label class="field">
-              <span>Hvorfor vil du søge dette</span>
-              <textarea name="hvorfor" rows="4" placeholder="Hvad søger du i et roleplay community" required></textarea>
+              <span>Hvad er din motivation for at søge?</span>
+              <textarea name="hvorfor" rows="4" placeholder="Hvad håber du at få ud af et roleplay-fællesskab" required></textarea>
             </label>
           </div>
         </div>
@@ -179,13 +183,13 @@
             <h2>Din karakter</h2>
 
             <label class="field">
-              <span>Navn og en kort baggrundshistorie</span>
-              <textarea name="karakter" rows="4" placeholder="Hvem er personen, du vil spille" required></textarea>
+              <span>Karakterens navn og en kort baggrund</span>
+              <textarea name="karakter" rows="4" placeholder="Hvem er personen, du gerne vil spille" required></textarea>
             </label>
 
             <label class="field">
-              <span>En anden spiller peger et våben mod din karakter uden varsel. Hvad gør du</span>
-              <textarea name="scenarie" rows="4" placeholder="Beskriv, hvordan din karakter reagerer i situationen" required></textarea>
+              <span>Pludselig retter en fremmed et våben mod din karakter. Hvordan reagerer du?</span>
+              <textarea name="scenarie" rows="4" placeholder="Beskriv din karakters reaktion på situationen" required></textarea>
             </label>
           </div>
         </div>
@@ -193,96 +197,20 @@
         <div class="form-block">
           <span class="form-block-number">04</span>
           <div class="form-block-body">
-            <div class="rule-check-header">
-              <h2>Regelenighed</h2>
-              <span class="rule-check-counter" id="ruleCounter">0 / 14 valgt (kræver alle)</span>
-            </div>
-
-            <div class="rule-check-box" id="ruleCheckBox">
-              <p class="rule-check-group-title">Generelt</p>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="G1" required>
-                <span><strong>G1)</strong> Metagaming er forbudt. Du må ikke bruge information fra Discord, streams eller andre spillere ude af karakter til at handle inde i karakter.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="G2" required>
-                <span><strong>G2)</strong> Powergaming er forbudt. Handlinger skal give andre en reel chance for at reagere.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="G3" required>
-                <span><strong>G3)</strong> Fear RP gælder altid. Din karakter skal reagere med den frygt, en almindelig person ville i samme situation.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="G4" required>
-                <span><strong>G4)</strong> New Life Rule. Efter et respawn husker din karakter ikke omstændighederne omkring dødsfaldet.</span>
-              </label>
-
-              <p class="rule-check-group-title">Karakter og roleplay</p>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="K1" required>
-                <span><strong>K1)</strong> En karakter, en historie. Byt ikke identitet mellem sessioner uden en reel grund inde i karakteren.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="K2" required>
-                <span><strong>K2)</strong> Roleplay går forud for resultat. En god scene, hvor din karakter taber, er bedre end en dårlig scene, hvor du vinder.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="K3" required>
-                <span><strong>K3)</strong> Ingen tilfældig vold. RDM og VDM medfører øjeblikkelig sagsbehandling hos staff.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="K4" required>
-                <span><strong>K4)</strong> Konflikter afsluttes in character, ikke i chatten midt i spillet.</span>
-              </label>
-
-              <p class="rule-check-group-title">Kommunikation</p>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="C1" required>
-                <span><strong>C1)</strong> Brug OOC-chat i undtagelsestilfælde. Hold dig in character så vidt muligt.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="C2" required>
-                <span><strong>C2)</strong> Vær ordentlig i tonen. Chikane, diskriminerende sprog og trusler fører til udelukkelse.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="C3" required>
-                <span><strong>C3)</strong> Voice er som udgangspunkt påkrævet. Skriv til staff først ved en midlertidig teknisk begrundelse.</span>
-              </label>
-
-              <p class="rule-check-group-title">Byen, biler og økonomi</p>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="B1" required>
-                <span><strong>B1)</strong> Kør efter forholdene. Vanvidskørsel uden RP-grund bliver behandlet som et brud på reglerne.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="B2" required>
-                <span><strong>B2)</strong> Exploits skal indrapporteres til staff frem for at blive brugt.</span>
-              </label>
-              <label class="rule-check-item">
-                <input type="checkbox" name="regel" value="B3" required>
-                <span><strong>B3)</strong> Illegal aktivitet kræver en historie, ikke en hurtig genvej til penge.</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-block">
-          <span class="form-block-number">05</span>
-          <div class="form-block-body">
             <h2>Sidste skridt</h2>
             <label class="field checkbox-field">
               <input type="checkbox" name="korrekt" required>
-              <span>Jeg bekræfter, at oplysningerne ovenfor er korrekte, og at forkerte oplysninger kan medføre afvisning</span>
+              <span>Jeg bekræfter, at ovenstående er sandt, og at urigtige oplysninger kan give afslag</span>
             </label>
           </div>
         </div>
 
         <div class="form-submit">
           <button type="submit" class="btn btn-primary btn-large">Send ansøgning</button>
-          <p class="form-hint">Svar kommer typisk inden for et til tre døgn på Discord.</p>
+          <p class="form-hint">Vi svarer normalt på Discord inden for et par dage.</p>
         </div>
 
-        <p class="form-success" id="formSuccess" hidden>Ansøgningen er sendt. Hold øje med dine Discord-beskeder, staff vender tilbage snarest.</p>
+        <p class="form-success" id="formSuccess" hidden>Din ansøgning er modtaget. Følg med på Discord, staff vender tilbage hurtigst muligt.</p>
       </form>
 
     </div>
@@ -294,9 +222,10 @@
   <div class="wrap footer-grid">
     <div class="footer-brand">
       <a href="/" class="brand">
-        <span class="brand-name">Everix</span>
+        <img src="/logo.png" alt="Everix" class="brand-mark">
+      <span class="brand-name">Everix</span>
       </a>
-      <p>Dansk FiveM roleplay. Allowlisted community bygget af spillere, for spillere.</p>
+      <p>Et dansk FiveM roleplay-fællesskab, drevet af og for spillerne selv.</p>
     </div>
     <div class="footer-col">
       <h4>Server</h4>
@@ -307,7 +236,7 @@
     <div class="footer-col">
       <h4>Community</h4>
       <a href="https://discord.gg/nfb6urQQnG" target="_blank" rel="noopener">Discord</a>
-      <a href="/#galleri">Galleri</a>
+      <!-- <a href="/#galleri">Galleri</a> re-add once the gallery section is unhidden -->
       <a href="/#faq">Ofte stillet</a>
     </div>
     <div class="footer-col">
@@ -319,13 +248,14 @@
   <div class="wrap footer-bottom">
     <span>© 2026 Everix Roleplay</span>
     <div class="footer-legal">
-      <a href="#">Privatlivspolitik</a>
-      <a href="#">Servicevilkår</a>
+      <a href="/privatlivspolitik">Privatlivspolitik</a>
+      <a href="/servicevilkaar">Servicevilkår</a>
     </div>
   </div>
 </footer>
 
-<script type="module" src="js/main.js"></script>
+<script type="module" src="/js/main.js"></script>
+<script type="module" src="js/staff-nav.js"></script>
 <script type="module" src="js/ansog.js"></script>
 </body>
 </html>

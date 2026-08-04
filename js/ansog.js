@@ -27,12 +27,31 @@
       if (loginGate) loginGate.hidden = false;
     });
 
-  var cards = document.querySelectorAll(".apply-card:not(.apply-card-disabled)");
+  var allCards = document.querySelectorAll(".apply-card[data-category]");
   var selectedCategory = null;
 
-  cards.forEach(function (card) {
+  fetch("/api/category-settings")
+    .then(function (r) { return r.json(); })
+    .then(function (settings) {
+      allCards.forEach(function (card) {
+        var category = card.getAttribute("data-category");
+        if (settings[category] === false) {
+          card.classList.add("apply-card-disabled");
+          card.setAttribute("aria-disabled", "true");
+          card.setAttribute("tabindex", "-1");
+          var cta = card.querySelector(".apply-card-cta");
+          if (cta) {
+            cta.classList.add("apply-card-cta-disabled");
+            cta.textContent = "Lukket for ansøgninger";
+          }
+        }
+      });
+    });
+
+  allCards.forEach(function (card) {
     card.addEventListener("click", function (e) {
       e.preventDefault();
+      if (card.classList.contains("apply-card-disabled")) return;
       selectedCategory = card.getAttribute("data-category");
       if (categoryLabel) categoryLabel.textContent = selectedCategory;
       cardsSection.hidden = true;
@@ -49,20 +68,6 @@
     });
   }
 
-  var ruleCheckboxes = document.querySelectorAll('input[name="regel"]');
-  var ruleCounter = document.getElementById("ruleCounter");
-  if (ruleCheckboxes.length && ruleCounter) {
-    var updateRuleCounter = function () {
-      var checked = document.querySelectorAll('input[name="regel"]:checked').length;
-      ruleCounter.textContent = checked + " / " + ruleCheckboxes.length + " valgt (kræver alle)";
-      ruleCounter.classList.toggle("is-complete", checked === ruleCheckboxes.length);
-    };
-    ruleCheckboxes.forEach(function (box) {
-      box.addEventListener("change", updateRuleCounter);
-    });
-    updateRuleCounter();
-  }
-
   var form = document.getElementById("applyForm");
   var success = document.getElementById("formSuccess");
   if (!form) return;
@@ -76,16 +81,10 @@
 
     var formData = new FormData(form);
     var answers = {};
-    var rules = [];
     formData.forEach(function (value, key) {
-      if (key === "regel") {
-        rules.push(value);
-        return;
-      }
       if (key === "discord") return; // identity comes from the verified session, not the form
       answers[key] = value;
     });
-    answers.regler_accepteret = rules;
 
     var submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
