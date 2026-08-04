@@ -36,6 +36,14 @@
   var customFrequency = document.getElementById("customFrequency");
   var customHint = document.getElementById("customDonateHint");
 
+  document.querySelectorAll(".amount-chip").forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      document.querySelectorAll(".amount-chip").forEach(function (c) { c.classList.remove("is-active"); });
+      chip.classList.add("is-active");
+      if (customAmount) customAmount.value = chip.getAttribute("data-amount");
+    });
+  });
+
   if (customBtn) {
     customBtn.addEventListener("click", function () {
       var amount = parseInt(customAmount.value, 10);

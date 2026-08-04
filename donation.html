@@ -48,8 +48,12 @@
 
 <main id="hovedindhold">
 
-  <section class="page-hero">
+  <section class="page-hero donation-hero">
     <div class="wrap">
+      <div class="hero-badges donation-hero-badges">
+        <span class="badge badge-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-8-4.9-8-11a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6.1-8 11-8 11z"/></svg>Ingen pay-to-win</span>
+        <span class="badge badge-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>100% gennemsigtig</span>
+      </div>
       <p class="eyebrow">Støt serveren</p>
       <h1 class="page-title">Donation</h1>
       <p class="page-lede">Everix koster ikke noget at spille på. Donationer hjælper med at dække drift og videreudvikling, og giver dig kosmetiske ekstra ting undervejs - ingen pay-to-win.</p>
@@ -64,6 +68,7 @@
       <div class="donation-grid">
 
         <article class="donation-card">
+          <span class="donation-icon donation-icon-spark">S</span>
           <h3>Spark</h3>
           <p class="donation-price">29 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
@@ -76,6 +81,7 @@
         </article>
 
         <article class="donation-card">
+          <span class="donation-icon donation-icon-flame">F</span>
           <h3>Flame</h3>
           <p class="donation-price">59 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
@@ -91,6 +97,7 @@
 
         <article class="donation-card donation-card-popular">
           <span class="donation-badge">Mest populær</span>
+          <span class="donation-icon donation-icon-blaze">B</span>
           <h3>Blaze</h3>
           <p class="donation-price">99 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
@@ -106,6 +113,7 @@
         </article>
 
         <article class="donation-card">
+          <span class="donation-icon donation-icon-inferno">I</span>
           <h3>Inferno</h3>
           <p class="donation-price">149 kr.<span>/månedligt</span></p>
           <ul class="donation-perks">
@@ -124,12 +132,55 @@
       </div>
 
       <p class="donation-note">Alle donationsfordele er kosmetiske eller praktiske bekvemmeligheder. Ingen af dem påvirker roleplay-balancen eller giver adgang til noget, du ikke kunne have opnået ved selv at spille dig frem til det.</p>
+    </div>
+  </section>
 
-      <p class="eyebrow" style="margin-top: 56px;">Andet beløb</p>
+  <section class="section donation-impact-section">
+    <div class="wrap">
+      <p class="eyebrow">Gennemsigtighed</p>
+      <h2 class="section-title">Hvor pengene går hen</h2>
+      <div class="impact-panel">
+        <div class="impact-row">
+          <div class="impact-row-head">
+            <span>Server &amp; drift</span>
+            <span class="impact-percent">55%</span>
+          </div>
+          <div class="impact-bar"><div class="impact-fill impact-fill-orange" style="width:55%"></div></div>
+          <p>Hosting, database og infrastruktur, så serveren kører stabilt døgnet rundt.</p>
+        </div>
+        <div class="impact-row">
+          <div class="impact-row-head">
+            <span>Udvikling</span>
+            <span class="impact-percent">30%</span>
+          </div>
+          <div class="impact-bar"><div class="impact-fill impact-fill-blue" style="width:30%"></div></div>
+          <p>Nye scripts, kort og features bygget af vores udviklerteam.</p>
+        </div>
+        <div class="impact-row">
+          <div class="impact-row-head">
+            <span>Events &amp; community</span>
+            <span class="impact-percent">15%</span>
+          </div>
+          <div class="impact-bar"><div class="impact-fill impact-fill-amber" style="width:15%"></div></div>
+          <p>Giveaways, events og premier til aktive medlemmer af community'et.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section donation-custom-section">
+    <div class="wrap">
+      <p class="eyebrow">Andet beløb</p>
       <h2 class="section-title">Eller støt med dit eget beløb</h2>
 
       <div class="form-panel custom-donation-panel">
         <p class="form-panel-label">Vælg selv beløb</p>
+        <div class="amount-chip-row" id="amountChipRow">
+          <button type="button" class="amount-chip" data-amount="25">25 kr.</button>
+          <button type="button" class="amount-chip" data-amount="50">50 kr.</button>
+          <button type="button" class="amount-chip" data-amount="100">100 kr.</button>
+          <button type="button" class="amount-chip" data-amount="250">250 kr.</button>
+        </div>
         <div class="form-panel-grid">
           <label class="field field-compact">
             <span>Beløb (kr.)</span>
