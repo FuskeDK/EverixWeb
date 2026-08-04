@@ -8,21 +8,24 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
   var pageTitle = document.getElementById("adminPageTitle");
 
   var tabAnsogninger = document.getElementById("adminTabAnsogninger");
+  var tabDonationer = document.getElementById("adminTabDonationer");
   var tabKategorier = document.getElementById("adminTabKategorier");
   var tabRegler = document.getElementById("adminTabRegler");
   var navButtons = document.querySelectorAll(".admin-nav-btn");
-  var tabTitles = { ansogninger: "Ansøgninger", kategorier: "Kategorier", regler: "Regler" };
+  var tabTitles = { ansogninger: "Ansøgninger", donationer: "Donationer", kategorier: "Kategorier", regler: "Regler" };
 
   navButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var tab = btn.getAttribute("data-admin-tab");
       navButtons.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
       tabAnsogninger.hidden = tab !== "ansogninger";
+      tabDonationer.hidden = tab !== "donationer";
       tabKategorier.hidden = tab !== "kategorier";
       tabRegler.hidden = tab !== "regler";
       pageTitle.textContent = tabTitles[tab] || "Ansøgninger";
       if (tab === "regler") loadRules();
       if (tab === "kategorier") loadCategorySettings();
+      if (tab === "donationer") loadDonations();
     });
   });
 
@@ -82,6 +85,21 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
 
   var allApplications = [];
   var activeCategoryFilter = "Alle";
+  var applicationStats = document.getElementById("applicationStats");
+
+  function renderStatRow(el, items) {
+    if (!el) return;
+    el.innerHTML = items
+      .map(function (item) {
+        return (
+          '<div class="admin-stat">' +
+          '<span class="admin-stat-label">' + escapeHtml(item.label) + "</span>" +
+          '<span class="admin-stat-value">' + escapeHtml(String(item.value)) + "</span>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
 
   subTabButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -118,6 +136,13 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
       return !query || a.discord_username.toLowerCase().indexOf(query) !== -1;
     });
     renderApplicationList(historyList, answered, true, loadApplications);
+
+    renderStatRow(applicationStats, [
+      { label: "Afventer", value: allApplications.filter(function (a) { return a.status === "pending"; }).length },
+      { label: "Godkendt", value: allApplications.filter(function (a) { return a.status === "approved"; }).length },
+      { label: "Afvist", value: allApplications.filter(function (a) { return a.status === "rejected"; }).length },
+      { label: "I alt", value: allApplications.length },
+    ]);
   }
 
   function loadApplications() {
@@ -272,6 +297,77 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
         loadRules();
       });
     });
+  }
+
+  // ---------- Donationer ----------
+  var donationStats = document.getElementById("donationStats");
+  var donationList = document.getElementById("donationList");
+  var donationSearch = document.getElementById("donationSearch");
+  var allDonations = [];
+
+  var TIER_LABELS = { spark: "Spark", flame: "Flame", blaze: "Blaze", inferno: "Inferno", custom: "Vælg selv" };
+
+  function formatKr(amount) {
+    return new Intl.NumberFormat("da-DK").format(amount || 0) + " kr.";
+  }
+
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString("da-DK", { year: "numeric", month: "short", day: "numeric" });
+  }
+
+  function renderDonationList() {
+    var query = (donationSearch.value || "").toLowerCase().trim();
+    var filtered = allDonations.filter(function (d) {
+      if (!query) return true;
+      return (
+        d.discord_id.toLowerCase().indexOf(query) !== -1 ||
+        d.code.toLowerCase().indexOf(query) !== -1 ||
+        (TIER_LABELS[d.tier] || d.tier).toLowerCase().indexOf(query) !== -1
+      );
+    });
+
+    donationList.innerHTML = filtered
+      .map(function (d) {
+        var statusClass = d.status === "unused" ? "admin-status-rejected" : "admin-status-approved";
+        var statusLabel = d.status === "unused" ? "Ikke indløst" : "Indløst";
+        return (
+          '<div class="admin-card ' + statusClass + '">' +
+          '<div class="admin-card-head" style="cursor:default;">' +
+          '<span class="admin-card-title">' + escapeHtml(TIER_LABELS[d.tier] || d.tier) + " &middot; " + formatKr(d.amount_kr) + "</span>" +
+          '<span class="admin-card-meta-inline">' +
+          "<span>" + escapeHtml(d.frequency === "month" ? "Månedlig" : "Engang") + "</span>" +
+          "<span>" + formatDate(d.created_at) + "</span>" +
+          '<span class="admin-status-badge">' + statusLabel + "</span>" +
+          "</span>" +
+          "</div>" +
+          '<div class="admin-card-body">' +
+          '<div class="admin-answers">' +
+          '<div class="admin-answer-row"><span class="admin-answer-key">Discord-ID</span><span class="admin-answer-value">' + escapeHtml(d.discord_id) + "</span></div>" +
+          '<div class="admin-answer-row"><span class="admin-answer-key">Kvitteringskode</span><span class="admin-answer-value">' + escapeHtml(d.code) + "</span></div>" +
+          "</div>" +
+          "</div>" +
+          "</div>"
+        );
+      })
+      .join("") || '<p class="apply-gate-text">Ingen donationer matcher din søgning.</p>';
+  }
+
+  if (donationSearch) donationSearch.addEventListener("input", renderDonationList);
+
+  function loadDonations() {
+    return fetch("/api/admin/donations", { credentials: "include" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        allDonations = data.donations || [];
+        var stats = data.stats || {};
+        renderStatRow(donationStats, [
+          { label: "Denne måned", value: formatKr(stats.totalThisMonth) },
+          { label: "I alt", value: formatKr(stats.totalAllTime) },
+          { label: "Aktive abonnementer", value: stats.activeSubscriptions || 0 },
+          { label: "Ikke-indløste koder", value: stats.unusedCodes || 0 },
+        ]);
+        renderDonationList();
+      });
   }
 
   loadApplications();

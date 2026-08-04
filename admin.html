@@ -25,6 +25,7 @@
     </a>
     <nav class="main-nav" aria-label="Admin navigation">
       <button type="button" class="admin-nav-btn is-active" data-admin-tab="ansogninger">Ansøgninger</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="donationer">Donationer</button>
       <button type="button" class="admin-nav-btn" data-admin-tab="kategorier">Kategorier</button>
       <button type="button" class="admin-nav-btn" data-admin-tab="regler">Regler</button>
     </nav>
@@ -64,6 +65,8 @@
         <a href="/api/me?logout=1&amp;return=/admin">Log ud</a>
       </div>
 
+      <div class="admin-stat-row" id="applicationStats"></div>
+
       <div class="admin-filters" id="adminFilters">
         <button type="button" class="admin-filter-btn is-active" data-filter="Alle">Alle</button>
         <button type="button" class="admin-filter-btn" data-filter="Whitelist">Whitelist</button>
@@ -85,6 +88,16 @@
         <input type="text" id="adminSearch" class="staff-search" placeholder="Søg efter Discord brugernavn...">
         <div id="adminHistoryList" class="admin-list"></div>
       </div>
+    </div>
+  </section>
+
+  <!-- DONATIONER TAB -->
+  <section class="section" id="adminTabDonationer" hidden>
+    <div class="wrap">
+      <div class="admin-stat-row" id="donationStats"></div>
+
+      <input type="text" id="donationSearch" class="staff-search" placeholder="Søg efter Discord-ID, kode eller niveau...">
+      <div id="donationList" class="admin-list"></div>
     </div>
   </section>
 
