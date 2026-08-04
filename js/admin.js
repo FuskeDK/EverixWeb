@@ -7,25 +7,45 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
   var denied = document.getElementById("adminDenied");
   var pageTitle = document.getElementById("adminPageTitle");
 
-  var tabAnsogninger = document.getElementById("adminTabAnsogninger");
-  var tabDonationer = document.getElementById("adminTabDonationer");
-  var tabKategorier = document.getElementById("adminTabKategorier");
-  var tabRegler = document.getElementById("adminTabRegler");
+  var tabPanels = {
+    ansogninger: document.getElementById("adminTabAnsogninger"),
+    donationer: document.getElementById("adminTabDonationer"),
+    abonnementer: document.getElementById("adminTabAbonnementer"),
+    identifikatorer: document.getElementById("adminTabIdentifikatorer"),
+    tickets: document.getElementById("adminTabTickets"),
+    kategorier: document.getElementById("adminTabKategorier"),
+    regler: document.getElementById("adminTabRegler"),
+  };
+  var tabAnsogninger = tabPanels.ansogninger;
+  var tabDonationer = tabPanels.donationer;
   var navButtons = document.querySelectorAll(".admin-nav-btn");
-  var tabTitles = { ansogninger: "Ansøgninger", donationer: "Donationer", kategorier: "Kategorier", regler: "Regler" };
+  var tabTitles = {
+    ansogninger: "Ansøgninger",
+    donationer: "Donationer",
+    abonnementer: "Abonnementer",
+    identifikatorer: "Plader & numre",
+    tickets: "Tickets",
+    kategorier: "Kategorier",
+    regler: "Regler",
+  };
+  var tabLoaders = {
+    regler: function () { loadRules(); },
+    kategorier: function () { loadCategorySettings(); },
+    donationer: function () { loadDonations(); },
+    abonnementer: function () { loadSubscriptions(); },
+    identifikatorer: function () { loadIdentifiers(); },
+    tickets: function () { loadTickets(); },
+  };
 
   navButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var tab = btn.getAttribute("data-admin-tab");
       navButtons.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
-      tabAnsogninger.hidden = tab !== "ansogninger";
-      tabDonationer.hidden = tab !== "donationer";
-      tabKategorier.hidden = tab !== "kategorier";
-      tabRegler.hidden = tab !== "regler";
+      Object.keys(tabPanels).forEach(function (key) {
+        if (tabPanels[key]) tabPanels[key].hidden = key !== tab;
+      });
       pageTitle.textContent = tabTitles[tab] || "Ansøgninger";
-      if (tab === "regler") loadRules();
-      if (tab === "kategorier") loadCategorySettings();
-      if (tab === "donationer") loadDonations();
+      if (tabLoaders[tab]) tabLoaders[tab]();
     });
   });
 
@@ -475,6 +495,205 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
         renderTierBreakdown(stats.byTier);
         renderDonationList();
       });
+  }
+
+  // ---------- Abonnementer ----------
+  var subscriptionList = document.getElementById("subscriptionList");
+  var refreshSubscriptionsBtn = document.getElementById("refreshSubscriptionsBtn");
+
+  function adminAction(resource, action, id) {
+    return fetch("/api/admin/applications?resource=" + resource, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ action: action, id: id }),
+    }).then(function (r) {
+      if (!r.ok) throw new Error("action_failed");
+      return r.json();
+    });
+  }
+
+  function renderSubscriptionList(subscriptions) {
+    subscriptionList.innerHTML = subscriptions.length
+      ? subscriptions
+          .map(function (s) {
+            return (
+              '<div class="admin-card">' +
+              '<div class="admin-card-head" style="cursor:default;">' +
+              '<span class="admin-card-title">' + escapeHtml(TIER_LABELS[s.tier] || s.tier) + " &middot; " + escapeHtml(s.discord_id) + "</span>" +
+              '<span class="admin-card-meta-inline">' +
+              "<span>Startet " + formatDate(s.created_at) + "</span>" +
+              '<button type="button" class="btn btn-outline btn-small" data-cancel-sub="' + escapeHtml(s.stripe_subscription_id) + '">Annullér</button>' +
+              "</span>" +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("")
+      : '<p class="apply-gate-text">Ingen aktive abonnementer.</p>';
+
+    subscriptionList.querySelectorAll("[data-cancel-sub]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (!confirm("Annullér dette abonnement i Stripe? Det kan ikke fortrydes.")) return;
+        btn.disabled = true;
+        adminAction("subscriptions", "cancel", btn.getAttribute("data-cancel-sub"))
+          .then(loadSubscriptions)
+          .catch(function () {
+            alert("Kunne ikke annullere abonnementet. Prøv igen.");
+            btn.disabled = false;
+          });
+      });
+    });
+  }
+
+  function loadSubscriptions() {
+    return fetch("/api/admin/applications?resource=subscriptions", { credentials: "include" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) { renderSubscriptionList(data.subscriptions || []); });
+  }
+
+  if (refreshSubscriptionsBtn) {
+    refreshSubscriptionsBtn.addEventListener("click", function () {
+      refreshSubscriptionsBtn.disabled = true;
+      loadSubscriptions().finally(function () { refreshSubscriptionsBtn.disabled = false; });
+    });
+  }
+
+  // ---------- Plader & numre ----------
+  var identifierList = document.getElementById("identifierList");
+  var identifierSearch = document.getElementById("identifierSearch");
+  var refreshIdentifiersBtn = document.getElementById("refreshIdentifiersBtn");
+  var allIdentifiers = [];
+  var KIND_LABELS = { plate: "Nummerplade", phone: "Telefonnummer" };
+
+  function renderIdentifierList() {
+    var query = (identifierSearch.value || "").toLowerCase().trim();
+    var filtered = allIdentifiers.filter(function (i) {
+      if (!query) return true;
+      return i.value.toLowerCase().indexOf(query) !== -1 || i.discord_id.toLowerCase().indexOf(query) !== -1;
+    });
+
+    identifierList.innerHTML = filtered.length
+      ? filtered
+          .map(function (i) {
+            return (
+              '<div class="admin-card">' +
+              '<div class="admin-card-head" style="cursor:default;">' +
+              '<span class="admin-card-title">' + escapeHtml(KIND_LABELS[i.kind] || i.kind) + ": " + escapeHtml(i.value) + "</span>" +
+              '<span class="admin-card-meta-inline">' +
+              "<span>" + escapeHtml(i.discord_id) + "</span>" +
+              "<span>" + formatDate(i.created_at) + "</span>" +
+              '<button type="button" class="btn btn-outline btn-small" data-release-id="' + escapeHtml(i.id) + '">Frigiv</button>' +
+              "</span>" +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("")
+      : '<p class="apply-gate-text">Ingen udstedte plader eller numre matcher din søgning.</p>';
+
+    identifierList.querySelectorAll("[data-release-id]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (!confirm("Frigiv denne værdi, så den kan bruges igen?")) return;
+        btn.disabled = true;
+        adminAction("identifiers", "release", btn.getAttribute("data-release-id"))
+          .then(loadIdentifiers)
+          .catch(function () {
+            alert("Kunne ikke frigive værdien. Prøv igen.");
+            btn.disabled = false;
+          });
+      });
+    });
+  }
+
+  if (identifierSearch) identifierSearch.addEventListener("input", renderIdentifierList);
+
+  function loadIdentifiers() {
+    return fetch("/api/admin/applications?resource=identifiers", { credentials: "include" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        allIdentifiers = data.identifiers || [];
+        renderIdentifierList();
+      });
+  }
+
+  if (refreshIdentifiersBtn) {
+    refreshIdentifiersBtn.addEventListener("click", function () {
+      refreshIdentifiersBtn.disabled = true;
+      loadIdentifiers().finally(function () { refreshIdentifiersBtn.disabled = false; });
+    });
+  }
+
+  // ---------- Tickets ----------
+  var ticketList = document.getElementById("ticketList");
+  var ticketFilters = document.getElementById("ticketFilters");
+  var refreshTicketsBtn = document.getElementById("refreshTicketsBtn");
+  var allTickets = [];
+  var activeTicketFilter = "open";
+
+  function renderTicketList() {
+    var filtered = activeTicketFilter === "all" ? allTickets : allTickets.filter(function (t) { return t.status === activeTicketFilter; });
+
+    ticketList.innerHTML = filtered.length
+      ? filtered
+          .map(function (t) {
+            var statusClass = t.status === "open" ? "" : "admin-status-approved";
+            return (
+              '<div class="admin-card ' + statusClass + '">' +
+              '<div class="admin-card-head" style="cursor:default;">' +
+              '<span class="admin-card-title">' + escapeHtml(t.category) + " &middot; " + escapeHtml(t.opener_discord_id) + "</span>" +
+              '<span class="admin-card-meta-inline">' +
+              "<span>" + formatDate(t.created_at) + "</span>" +
+              '<span class="admin-status-badge">' + escapeHtml(t.status === "open" ? "Åben" : "Lukket") + "</span>" +
+              (t.status === "open"
+                ? '<button type="button" class="btn btn-outline btn-small" data-close-ticket="' + escapeHtml(t.id) + '">Luk</button>'
+                : "") +
+              "</span>" +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("")
+      : '<p class="apply-gate-text">Ingen tickets i denne visning.</p>';
+
+    ticketList.querySelectorAll("[data-close-ticket]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        if (!confirm("Markér denne ticket som lukket? Dette lukker ikke selve Discord-kanalen.")) return;
+        btn.disabled = true;
+        adminAction("tickets", "close", btn.getAttribute("data-close-ticket"))
+          .then(loadTickets)
+          .catch(function () {
+            alert("Kunne ikke lukke ticketen. Prøv igen.");
+            btn.disabled = false;
+          });
+      });
+    });
+  }
+
+  if (ticketFilters) {
+    ticketFilters.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-ticket-filter]");
+      if (!btn) return;
+      activeTicketFilter = btn.getAttribute("data-ticket-filter");
+      ticketFilters.querySelectorAll(".admin-filter-btn").forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+      renderTicketList();
+    });
+  }
+
+  function loadTickets() {
+    return fetch("/api/admin/applications?resource=tickets", { credentials: "include" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        allTickets = data.tickets || [];
+        renderTicketList();
+      });
+  }
+
+  if (refreshTicketsBtn) {
+    refreshTicketsBtn.addEventListener("click", function () {
+      refreshTicketsBtn.disabled = true;
+      loadTickets().finally(function () { refreshTicketsBtn.disabled = false; });
+    });
   }
 
   loadApplications();

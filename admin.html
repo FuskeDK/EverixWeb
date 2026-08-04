@@ -26,6 +26,9 @@
     <nav class="main-nav" aria-label="Admin navigation">
       <button type="button" class="admin-nav-btn is-active" data-admin-tab="ansogninger">Ansøgninger</button>
       <button type="button" class="admin-nav-btn" data-admin-tab="donationer">Donationer</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="abonnementer">Abonnementer</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="identifikatorer">Plader &amp; numre</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="tickets">Tickets</button>
       <button type="button" class="admin-nav-btn" data-admin-tab="kategorier">Kategorier</button>
       <button type="button" class="admin-nav-btn" data-admin-tab="regler">Regler</button>
     </nav>
@@ -109,6 +112,44 @@
 
       <input type="text" id="donationSearch" class="staff-search" placeholder="Søg efter Discord-ID, kode eller niveau...">
       <div id="donationList" class="admin-list"></div>
+    </div>
+  </section>
+
+  <!-- ABONNEMENTER TAB -->
+  <section class="section" id="adminTabAbonnementer" hidden>
+    <div class="wrap">
+      <p class="apply-gate-text" style="margin-bottom: 20px;">Aktive månedlige donation-abonnementer. Annullering stopper opkrævningen i Stripe med det samme.</p>
+      <div class="admin-toolbar">
+        <button type="button" class="btn btn-outline btn-small" id="refreshSubscriptionsBtn">Opdatér</button>
+      </div>
+      <div id="subscriptionList" class="admin-list"></div>
+    </div>
+  </section>
+
+  <!-- IDENTIFIKATORER TAB -->
+  <section class="section" id="adminTabIdentifikatorer" hidden>
+    <div class="wrap">
+      <p class="apply-gate-text" style="margin-bottom: 20px;">Alle udstedte custom nummerplader og telefonnumre. Frigiv en værdi for at gøre den tilgængelig igen.</p>
+      <div class="admin-toolbar">
+        <button type="button" class="btn btn-outline btn-small" id="refreshIdentifiersBtn">Opdatér</button>
+      </div>
+      <input type="text" id="identifierSearch" class="staff-search" placeholder="Søg efter værdi eller Discord-ID...">
+      <div id="identifierList" class="admin-list"></div>
+    </div>
+  </section>
+
+  <!-- TICKETS TAB -->
+  <section class="section" id="adminTabTickets" hidden>
+    <div class="wrap">
+      <div class="admin-filters" id="ticketFilters">
+        <button type="button" class="admin-filter-btn is-active" data-ticket-filter="open">Åbne</button>
+        <button type="button" class="admin-filter-btn" data-ticket-filter="closed">Lukkede</button>
+        <button type="button" class="admin-filter-btn" data-ticket-filter="all">Alle</button>
+      </div>
+      <div class="admin-toolbar">
+        <button type="button" class="btn btn-outline btn-small" id="refreshTicketsBtn">Opdatér</button>
+      </div>
+      <div id="ticketList" class="admin-list"></div>
     </div>
   </section>
 
