@@ -33,7 +33,6 @@
 
   var customBtn = document.getElementById("customDonateBtn");
   var customAmount = document.getElementById("customAmount");
-  var customFrequency = document.getElementById("customFrequency");
   var customHint = document.getElementById("customDonateHint");
 
   document.querySelectorAll(".amount-chip").forEach(function (chip) {
@@ -67,7 +66,7 @@
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ amount: amount, frequency: customFrequency.value }),
+            body: JSON.stringify({ amount: amount, frequency: "once" }),
           })
             .then(function (r) { return r.json(); })
             .then(function (data) {
