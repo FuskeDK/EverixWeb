@@ -766,9 +766,11 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
   position: relative;
   background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius-l);
   padding: 30px 26px 28px; display: flex; flex-direction: column;
+  min-height: 420px;
   transition: border-color .2s var(--ease), transform .2s var(--ease), background-color .2s var(--ease);
 }
 .donation-card:hover{ border-color: var(--line-strong); transform: translateY(-4px); background: var(--bg-3); }
+.donation-card-custom{ min-height: 380px; padding-top: 24px; }
 .donation-card-spark{ --tier-color: var(--blue); }
 .donation-card-flame{ --tier-color: var(--amber); }
 .donation-card-blaze{ --tier-color: var(--orange); }
@@ -804,7 +806,7 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
 .donation-note{ max-width: 720px; margin: 40px auto 0; text-align: center; color: var(--gray-dim); font-size: 13.5px; line-height: 1.7; }
 
 .donation-custom-field{ margin-bottom: 14px; }
-.donation-card-custom .form-hint{ margin-bottom: 20px; }
+.donation-card-custom .form-hint{ margin-bottom: 20px; margin-top: auto; }
 .donation-card-custom .amount-chip{ padding: 7px 14px; font-size: 13px; }
 .donation-card-custom .amount-chip-row{ margin-bottom: 18px; }
 
