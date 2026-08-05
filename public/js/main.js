@@ -65,4 +65,28 @@
     });
   });
 
+  /* Ribbon line draws in as the steps section scrolls into view */
+  var ribbonPath = document.getElementById("ribbonPath");
+  if (ribbonPath && "getTotalLength" in ribbonPath) {
+    var length = ribbonPath.getTotalLength();
+    ribbonPath.style.strokeDasharray = length;
+    ribbonPath.style.strokeDashoffset = length;
+
+    var stepsSection = document.getElementById("kom-i-gang");
+    if (stepsSection && "IntersectionObserver" in window) {
+      var ribbonIO = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              ribbonPath.style.transition = "stroke-dashoffset 1.6s cubic-bezier(.22,.75,.32,1)";
+              ribbonPath.style.strokeDashoffset = 0;
+              ribbonIO.unobserve(ribbonPath);
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      ribbonIO.observe(stepsSection);
+    }
+  }
 })();
