@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="/logo.png">
 <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body class="dashboard-body">
 
 <div class="grain" aria-hidden="true"></div>
 <a class="skip-link" href="#hovedindhold">Spring til indhold</a>
@@ -49,46 +49,64 @@
 
 <main id="hovedindhold">
 
-  <section class="page-hero">
-    <div class="wrap">
-      <p class="eyebrow">Dashboard</p>
-      <h1 class="page-title">Din side</h1>
-      <p class="page-lede">Overblik over dine ansøgninger og donationer på Everix.</p>
-    </div>
-  </section>
-
   <!-- LOGIN GATE -->
-  <section class="section apply-section" id="dashboardLoginGate" hidden>
+  <section class="section apply-section dashboard-gate" id="dashboardLoginGate" hidden>
     <div class="wrap apply-wrap apply-gate">
+      <p class="eyebrow" style="justify-content:center;">Dashboard</p>
       <p class="apply-gate-text">Log ind med Discord for at se dit dashboard.</p>
       <a href="/api/discord-callback?return=/dashboard" class="btn btn-primary btn-large">Log ind med Discord</a>
     </div>
   </section>
 
   <!-- DASHBOARD -->
-  <section class="section" id="dashboardContent" hidden>
-    <div class="wrap">
-      <div class="apply-user-bar">
-        <span id="dashboardWho">Logget ind</span>
-        <a href="/api/me?logout=1&amp;return=/">Log ud</a>
-      </div>
+  <div id="dashboardContent" hidden>
 
-      <div class="admin-stat-row" id="dashboardStats"></div>
+    <section class="dashboard-banner">
+      <div class="wrap dashboard-banner-inner">
+        <div class="dashboard-identity">
+          <img class="dashboard-avatar" id="dashboardAvatar" src="" alt="">
+          <div>
+            <p class="dashboard-eyebrow">Velkommen tilbage</p>
+            <h1 class="dashboard-username" id="dashboardUsername">-</h1>
+            <p class="dashboard-id" id="dashboardId"></p>
+          </div>
+        </div>
+        <a href="/api/me?logout=1&amp;return=/" class="btn btn-outline btn-small dashboard-logout">Log ud</a>
+      </div>
+    </section>
 
-      <div class="admin-filters">
-        <button type="button" class="admin-filter-btn staff-tab-btn is-active" data-tab="ansogninger">Mine ansøgninger</button>
-        <button type="button" class="admin-filter-btn staff-tab-btn" data-tab="donationer">Mine donationer</button>
-      </div>
+    <section class="section dashboard-main">
+      <div class="wrap">
+        <div class="dashboard-tiles" id="dashboardStats"></div>
 
-      <div id="dashboardTabAnsogninger">
-        <div id="dashboardApplicationsList" class="admin-list"></div>
+        <div class="dashboard-layout">
+          <nav class="dashboard-rail" id="dashboardRail" aria-label="Dashboard sektioner">
+            <button type="button" class="dashboard-rail-item is-active" data-tab="ansogninger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
+              Ansøgninger
+            </button>
+            <button type="button" class="dashboard-rail-item" data-tab="donationer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1 3 2.3c0 3-6 1.7-6 4.7 0 1.3 1.3 2.3 3 2.3s3-1.1 3-2.5"/></svg>
+              Donationer
+            </button>
+          </nav>
+
+          <div class="dashboard-panel">
+            <div id="dashboardTabAnsogninger">
+              <p class="dashboard-panel-title">Mine ansøgninger</p>
+              <div id="dashboardApplicationsList" class="admin-list"></div>
+            </div>
+            <div id="dashboardTabDonationer" hidden>
+              <p class="dashboard-panel-title">Mine donationer</p>
+              <div id="dashboardDonationsList" class="admin-list"></div>
+              <p class="rules-note" style="margin-top:24px;">Har du en kvitteringskode, du endnu ikke har indløst? Opret en Donation-ticket på Discord og indtast koden for at få dine fordele.</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div id="dashboardTabDonationer" hidden>
-        <div id="dashboardDonationsList" class="admin-list"></div>
-        <p class="rules-note" style="margin-top:24px;">Har du en kvitteringskode, du endnu ikke har indløst? Opret en Donation-ticket på Discord og indtast koden for at få dine fordele.</p>
-      </div>
-    </div>
-  </section>
+    </section>
+
+  </div>
 
 </main>
 

@@ -5,27 +5,36 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
 
   var loginGate = document.getElementById("dashboardLoginGate");
   var content = document.getElementById("dashboardContent");
-  var who = document.getElementById("dashboardWho");
+  var avatar = document.getElementById("dashboardAvatar");
+  var usernameEl = document.getElementById("dashboardUsername");
+  var idEl = document.getElementById("dashboardId");
   var stats = document.getElementById("dashboardStats");
 
   var applicationsList = document.getElementById("dashboardApplicationsList");
   var donationsList = document.getElementById("dashboardDonationsList");
 
-  var tabButtons = document.querySelectorAll(".staff-tab-btn");
+  var railButtons = document.querySelectorAll(".dashboard-rail-item");
   var tabPanels = {
     ansogninger: document.getElementById("dashboardTabAnsogninger"),
     donationer: document.getElementById("dashboardTabDonationer"),
   };
 
-  tabButtons.forEach(function (btn) {
+  railButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var tab = btn.getAttribute("data-tab");
-      tabButtons.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
+      railButtons.forEach(function (b) { b.classList.toggle("is-active", b === btn); });
       Object.keys(tabPanels).forEach(function (key) { tabPanels[key].hidden = key !== tab; });
     });
   });
 
   var TIER_LABELS = { spark: "Spark", flame: "Flame", blaze: "Blaze", inferno: "Inferno", custom: "Vælg selv" };
+
+  var STAT_ICONS = {
+    pending: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
+    approved: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 6 9 17l-5-5"/></svg>',
+    rejected: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+    donations: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5c0-1.4 1.3-2.5 3-2.5s3 1 3 2.3c0 3-6 1.7-6 4.7 0 1.3 1.3 2.3 3 2.3s3-1.1 3-2.5"/></svg>',
+  };
 
   function formatKr(amount) {
     return new Intl.NumberFormat("da-DK").format(amount || 0) + " kr.";
@@ -35,13 +44,14 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
     return new Date(iso).toLocaleDateString("da-DK", { year: "numeric", month: "short", day: "numeric" });
   }
 
-  function renderStatRow(el, items) {
-    el.innerHTML = items
+  function renderTiles(items) {
+    stats.innerHTML = items
       .map(function (item) {
         return (
-          '<div class="admin-stat">' +
-          '<span class="admin-stat-label">' + escapeHtml(item.label) + "</span>" +
-          '<span class="admin-stat-value">' + escapeHtml(String(item.value)) + "</span>" +
+          '<div class="dashboard-tile dashboard-tile-' + item.tone + '">' +
+          '<span class="dashboard-tile-icon">' + STAT_ICONS[item.icon] + "</span>" +
+          '<span class="dashboard-tile-value">' + escapeHtml(String(item.value)) + "</span>" +
+          '<span class="dashboard-tile-label">' + escapeHtml(item.label) + "</span>" +
           "</div>"
         );
       })
@@ -93,17 +103,21 @@ import { renderApplicationList, escapeHtml } from "/js/applications-ui.js";
       renderApplicationList(applicationsList, applications, false);
       renderDonations(donations);
 
-      renderStatRow(stats, [
-        { label: "Afventer", value: applications.filter(function (a) { return a.status === "pending"; }).length },
-        { label: "Godkendt", value: applications.filter(function (a) { return a.status === "approved"; }).length },
-        { label: "Afvist", value: applications.filter(function (a) { return a.status === "rejected"; }).length },
-        { label: "Donationer", value: donations.length },
+      renderTiles([
+        { label: "Afventer", value: applications.filter(function (a) { return a.status === "pending"; }).length, icon: "pending", tone: "blue" },
+        { label: "Godkendt", value: applications.filter(function (a) { return a.status === "approved"; }).length, icon: "approved", tone: "green" },
+        { label: "Afvist", value: applications.filter(function (a) { return a.status === "rejected"; }).length, icon: "rejected", tone: "orange" },
+        { label: "Donationer", value: donations.length, icon: "donations", tone: "amber" },
       ]);
 
       return fetch("/api/me")
         .then(function (r) { return r.json(); })
         .then(function (me) {
-          if (me.loggedIn) who.textContent = "Logget ind som " + me.username;
+          if (!me.loggedIn) return;
+          usernameEl.textContent = me.username;
+          idEl.textContent = "Discord-ID " + me.discordId;
+          avatar.src = me.avatarUrl;
+          avatar.alt = me.username;
         });
     })
     .catch(function () {
