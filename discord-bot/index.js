@@ -19,6 +19,14 @@ import {
 } from "discord.js";
 import { createClient } from "@supabase/supabase-js";
 
+// Node < 22 has no native WebSocket global, which @supabase/realtime-js
+// requires at construction time (even though this bot never uses realtime
+// subscriptions) - polyfill it so createClient() doesn't crash on older Node.
+if (!globalThis.WebSocket) {
+  const { default: WebSocket } = await import("ws");
+  globalThis.WebSocket = WebSocket;
+}
+
 const GUILD_ID = "1192916761113268326";
 const TICKET_PANEL_CHANNEL_ID = "1531015902429057085";
 const STAFF_ROLE_ID = "1531015608404279296";
