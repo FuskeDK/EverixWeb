@@ -50,7 +50,10 @@ run that once in the Supabase SQL Editor before starting the bot.
    - `discord-bot/index.js`
    - `discord-bot/package.json`
 3. Set the environment variables above in the panel's **Env** tab (not
-   Startup - that's for the run command).
+   Startup - that's for the run command). If the panel writes them into a
+   `.env` file on disk rather than injecting real process env vars (some
+   hosts do this), that's fine - `index.js` loads `dotenv/config` on startup
+   specifically to read that file.
 4. Startup command: `npm install && npm start`.
 5. Start the server. Console should print `Logged in as <bot-name>` and
    `Slash commands registered.`
