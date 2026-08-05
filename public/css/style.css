@@ -215,10 +215,17 @@ a.btn-pill:hover{ border-color: var(--orange); color: var(--orange); }
   min-height: 90vh; display: flex; align-items: center;
   padding: 120px 0 60px;
 }
+.hero::after{
+  content: ""; position: absolute; inset: 0; z-index: -2;
+  background-image: url("/hero-bg.jpg");
+  background-size: cover; background-position: center 30%;
+  opacity: .28;
+}
 .hero::before{
   content: ""; position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(180deg, transparent 78%, var(--bg) 100%),
+    linear-gradient(180deg, transparent 66%, var(--bg) 100%),
+    linear-gradient(90deg, var(--bg) 0%, rgba(10,10,11,0.82) 32%, rgba(10,10,11,0.35) 65%, rgba(10,10,11,0.55) 100%),
     radial-gradient(52% 48% at 84% 12%, rgba(67,124,253,0.13), transparent 62%),
     radial-gradient(38% 38% at 8% 78%, rgba(91,142,242,0.07), transparent 55%);
 }
