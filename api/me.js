@@ -18,5 +18,14 @@ export default async function handler(req, res) {
     return;
   }
   const categories = await getStaffCategories(req);
-  res.status(200).json({ loggedIn: true, username: session.discordUsername, discordId: session.discordId, categories });
+  const avatarUrl = session.discordAvatar
+    ? `https://cdn.discordapp.com/avatars/${session.discordId}/${session.discordAvatar}.png?size=64`
+    : `https://cdn.discordapp.com/embed/avatars/${Number(BigInt(session.discordId) >> 22n) % 6}.png`;
+  res.status(200).json({
+    loggedIn: true,
+    username: session.discordUsername,
+    discordId: session.discordId,
+    avatarUrl,
+    categories,
+  });
 }

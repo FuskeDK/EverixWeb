@@ -36,6 +36,7 @@ export default async function handler(req, res) {
     createUserSession(res, {
       discordId: user.id,
       discordUsername: user.username,
+      discordAvatar: user.avatar,
     });
 
     res.writeHead(302, { Location: destination });

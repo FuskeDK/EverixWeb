@@ -10,6 +10,7 @@
     { "source": "/bande", "destination": "/api/staff-page?category=Bande" },
     { "source": "/whitelist", "destination": "/api/staff-page?category=Whitelist" },
     { "source": "/donation", "destination": "/donation.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/tak", "destination": "/tak.html" },
     { "source": "/privatlivspolitik", "destination": "/privatlivspolitik.html" },
     { "source": "/servicevilkaar", "destination": "/servicevilkaar.html" }
