@@ -11,6 +11,8 @@ export default defineConfig({
         ansog: resolve(__dirname, 'ansog.html'),
         admin: resolve(__dirname, 'admin.html'),
         donation: resolve(__dirname, 'donation.html'),
+        dashboard: resolve(__dirname, 'dashboard.html'),
+        notFound: resolve(__dirname, '404.html'),
         tak: resolve(__dirname, 'tak.html'),
         privatlivspolitik: resolve(__dirname, 'privatlivspolitik.html'),
         servicevilkaar: resolve(__dirname, 'servicevilkaar.html'),
